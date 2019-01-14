@@ -114,7 +114,7 @@ function init_gear_sets()
 	--[[
 	sets.precast.WS = {
 		ammo="Yetshila",
-        head="Jhakri Coronal +1",
+        head="Jhakri Coronal +2",
 		neck="Fotia Gorget",
 		ear1="Moonshade Earring",
 		ear2="Sherida Earring",
@@ -132,7 +132,7 @@ function init_gear_sets()
 	
 	sets.precast.WS['Savage Blade'] = {
 		ammo="Amar Cluster",
-        head="Jhakri Coronal +1",
+        head="Jhakri Coronal +2",
 		neck="Caro Necklace",
 		ear1="Moonshade Earring",
 		ear2="Ishvara Earring",
