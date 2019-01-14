@@ -293,7 +293,7 @@ function init_gear_sets()
 	
 	
     sets.precast.WS['Requiescat'] = set_combine(sets.precast.WS,{
-		head="Jhakri Coronal +1",
+		head="Jhakri Coronal +2",
 		neck="Fotia Gorget",
 		ear1="Moonshade Earring",
 		ear2="Brutal Earring",
