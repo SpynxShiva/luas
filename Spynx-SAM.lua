@@ -60,7 +60,7 @@ function init_gear_sets()
     --sets.precast.JA['Hasso'] = {}
     sets.precast.JA['Meditate'] = {
 		head="Wakido Kabuto +1",
-		hands="Sakonji Kote",
+		hands="Sakonji Kote +1",
 		back=gear.SAM_TP_Cape,
 	}
 
