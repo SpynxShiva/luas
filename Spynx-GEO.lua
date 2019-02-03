@@ -25,7 +25,7 @@ end
 function user_setup()
     state.OffenseMode:options('None', 'Normal')
     state.CastingMode:options('Normal', 'Resistant','Exp')
-    state.IdleMode:options('Normal', 'PDT')
+    state.IdleMode:options('Normal', 'DT')
  
 	state.MagicBurst = M(false, 'Magic Burst')
     
@@ -62,22 +62,22 @@ function init_gear_sets()
     -- Fast cast sets for spells
  
     sets.precast.FC = {				-- FC
-		main="Solstice",			-- 5
 		sub="Chanter's Shield",		-- 3
         head=gear.Merl_FC_head,		-- 13
-		neck="Orunmila's Torque",	--  5
-		ear1="Etiolation Earring",	--	1
-		ear2="Loquacious Earring",	--	2
+		neck="Orunmila's Torque",	-- 5
+		ear1="Etiolation Earring",	-- 1
+		ear2="Loquacious Earring",	-- 2
         body="Anhur Robe",			-- 10
-        ring1="Kishar Ring",		--  4
-		ring2="Prolix Ring",		--  2
-		back="Lifestream Cape",		--  7
-		waist="Witful Belt",		--	3
+        ring1="Kishar Ring",		-- 4
+		ring2="Prolix Ring",		-- 2
+		back="Lifestream Cape",		-- 7
+		waist="Witful Belt",		-- 3
 		legs="Geomancy Pants",		-- 10
 		feet=gear.Merl_FC_feet		-- 11
-	}								-- 76
+		-- /RDM						-- 15
+	}								-- 86
  
-    sets.precast.FC.Cure = set_combine(sets.precast.FC, {body="Heka's Kalasiris"})
+    sets.precast.FC.Cure = set_combine(sets.precast.FC, {})
  
     sets.precast.FC['Elemental Magic'] = set_combine(sets.precast.FC, {hands="Bagua Mitaines"})
  
@@ -97,7 +97,7 @@ function init_gear_sets()
 	sets.midcast.Bolster.Pet.Indi = {body="Bagua Tunic +1"}
  
     sets.midcast.Geomancy = {
-		main="Solstice", sub="Genmei Shield", range="Dunna",
+		main="Idris", sub="Genmei Shield", range="Dunna",
 		head="Azimuth Hood +1",neck="Incanter's Torque",
 		body="Bagua Tunic +1",hands="Geomancy Mitaines +2",
         back="Lifestream Cape",waist="Austerity Belt +1",legs="Bagua Pants",feet="Medium's Sabots"}
@@ -202,6 +202,18 @@ function init_gear_sets()
 	--------------------------------------
     -- Idle/resting/defense/etc sets
     --------------------------------------
+	
+	sets.DT = {
+		sub="Genmei Shield",		--10
+		neck="Loricate Torque +1",	-- 6	6
+		body="Mallquis Saio +2",	-- 8	8
+		ring1="Defending Ring",		--10	10
+		ring2="Dark Ring",			-- 6	4
+		legs="Artsieq Hose",		-- 5
+		back="Moonbeam Cape"		-- 5	5
+		-- Shell2					--		14
+									--50	47
+	}
  
     -- Resting sets
     sets.resting = {}
@@ -210,43 +222,43 @@ function init_gear_sets()
     sets.idle = {
 		main="Bolelabunga", sub="Genmei Shield",range="Dunna",
         head="Befouled Crown",neck="Loricate Torque +1",ear1="Etiolation Earring",ear2="Loquacious Earring",
-        body="Jhakri Robe +2",hands="Bagua Mitaines",ring1="Defending Ring",ring2=gear.dark_ring,
+        body="Jhakri Robe +2",hands="Bagua Mitaines",ring1="Stikini Ring +1",ring2="Stikini Ring +1",
         back="Moonbeam Cape",waist="Witful Belt",legs="Assiduity Pants +1",feet="Geomancy Sandals +1"
 	}
  
-	sets.idle.PDT = set_combine(sets.idle, { hands="Geomancy Mitaines +2",feet="Azimuth Gaiters"})
+	sets.idle.DT = set_combine(sets.idle,sets.DT)
+	
+	sets.idle.Town = set_combine(sets.idle, {
+        main="Idris", sub="Ammurapi Shield",
+		head="Azimuth Hood +1",neck="Incanter's Torque",
+		body="Bagua Tunic +1"    
+    })
+    
+	sets.idle.Weak = set_combine(sets.idle, {})
 
 	-- .Pet sets are for when Luopan is present.
     sets.idle.Pet = set_combine(sets.idle, {
-        main="Solstice", sub="Genmei Shield",
+        main="Idris", sub="Genmei Shield",
 		head="Azimuth Hood +1",ear1="Handler's Earring",ear2="Handler's Earring +1",
         hands="Geomancy Mitaines +2",
         back=gear.GEO_pet_Cape,waist="Isa Belt",feet="Bagua Sandals"
     })
 
-    sets.idle.PDT.Pet = sets.idle.Pet
+    sets.idle.DT.Pet = set_combine(sets.idle.Pet,sets.DT)
 
     -- .Indi sets are for when an Indi-spell is active.
     sets.idle.Indi = set_combine(sets.idle, {
-        main="Solstice", sub="Genmei Shield",
+        main="Idris", sub="Genmei Shield",
 		legs="Bagua Pants", 
         back=gear.GEO_pet_Cape,
         feet="Azimuth Gaiters"
     })
+	sets.idle.DT.Indi = set_combine(sets.idle.Indi,sets.DT)
 	
     -- .Pet sets are for when Luopan is present.
-	sets.idle.Pet.Indi = set_combine(sets.idle.Pet, {main="Solstice", sub="Genmei Shield",legs="Bagua Pants"})
-    sets.idle.PDT.Indi = set_combine(sets.idle.PDT, {main="Solstice", sub="Genmei Shield",legs="Bagua Pants", feet="Azimuth Gaiters"})
-	sets.idle.PDT.Pet.Indi = set_combine(sets.idle.PDT.Pet, {main="Solstice", sub="Genmei Shield", legs="Bagua Pants"})
+	sets.idle.Pet.Indi = set_combine(sets.idle.Pet, {legs="Bagua Pants"})
+    sets.idle.DT.Pet.Indi = set_combine(sets.idle.Pet.Indi, sets.DT)
 
-    sets.idle.Town = set_combine(sets.idle, {
-        main="Solstice", sub="Genmei Shield",
-		head="Azimuth Hood +1",neck="Incanter's Torque",
-		body="Bagua Tunic +1"        
-    })
-    
-	sets.idle.Weak = set_combine(sets.idle, {})
- 
     -- Defense sets
     sets.defense.PDT = set_combine(sets.idle, {})
 	sets.defense.MDT = set_combine(sets.idle, {})
@@ -264,7 +276,7 @@ function init_gear_sets()
     -- EG: sets.engaged.Dagger.Accuracy.Evasion
  
     -- Normal melee group
-    sets.engaged = set_combine(sets.idle, {main="Solstice",hands="Geomancy Mitaines +2"})
+    sets.engaged = set_combine(sets.idle, {main="Idris",hands="Geomancy Mitaines +2"})
  
     --------------------------------------
     -- Custom buff sets
