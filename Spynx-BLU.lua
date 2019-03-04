@@ -262,7 +262,7 @@ function init_gear_sets()
 		feet="Thereoid Greaves"
 	}
     
-    sets.precast.WS.acc = set_combine(sets.precast.WS, {})
+    sets.precast.WS.Acc = set_combine(sets.precast.WS, {})
 	
 	sets.precast.WS['Savage Blade'] = set_combine(sets.precast.WS,{
 		ammo="Mantoptera Eye",
@@ -276,24 +276,27 @@ function init_gear_sets()
 		ring2="Epaminondas's Ring",
         back=gear.BLU_SB_Cape,
 		waist="Prosilio Belt +1",
-		legs=gear.Herc_SB_legs,
+		legs="Luhlaza Shalwar +3",--gear.Herc_SB_legs,
 		feet=gear.Herc_SB_feet
 	})
 	
-	sets.precast.WS['Savage Blade'].acc=sets.precast.WS['Savage Blade']
+	sets.precast.WS['Savage Blade'].Acc=set_combine(sets.precast.WS['Savage Blade'],{
+		waist="Grunfeld Rope"
+	})
+	
 	sets.precast.WS["Savage Blade"].FullTP = set_combine(sets.precast.WS["Savage Blade"],{
 		ear1="Odnowa Earring +1"
 	})
 
 	sets.precast.WS['Expiacion'] = sets.precast.WS['Savage Blade']
-	sets.precast.WS['Expiacion'].acc=sets.precast.WS['Expiacion']
+	sets.precast.WS['Expiacion'].Acc= sets.precast.WS['Savage Blade'].Acc
 	sets.precast.WS["Expiacion"].FullTP = set_combine(sets.precast.WS["Expiacion"],{
 		ear1="Odnowa Earring +1"
 	})
 	
 	
     sets.precast.WS['Requiescat'] = set_combine(sets.precast.WS,{
-		head="Jhakri Coronal +2",
+		head="Jhakri Coronal +1",
 		neck="Fotia Gorget",
 		ear1="Moonshade Earring",
 		ear2="Brutal Earring",
@@ -342,7 +345,13 @@ function init_gear_sets()
 		back=gear.BLU_nuke_Cape, waist="Yamabuki-no-Obi", legs=gear.Amal_nuke_legs, feet=gear.Amal_nuke_feet
 	}
 	
-	sets.precast.WS['Sanguine Blade'] = sets.midcast['Blue Magic'].Magical
+	sets.precast.WS['Sanguine Blade'] = set_combine(sets.midcast['Blue Magic'].Magical,{
+		head="Pixie Hairpin +1",
+		hands="Jhakri Cuffs +2",
+		legs="Luhlaza Shalwar +3",
+		ring1="Epaminondas's Ring",
+		ring2="Archon Ring",
+	})
 	
 	sets.magic_burst = {
 									-- MB1	MB2
@@ -371,7 +380,7 @@ function init_gear_sets()
 		ear2="Regal Earring",
 		ring1="Stikini Ring +1",
 		ring2="Stikini Ring +1",
-		legs="Assimilator's Shalwar +2",
+		legs="Luhlaza Shalwar +3",
 		waist="Luminary Sash",
 		
 	})
@@ -923,4 +932,3 @@ end
 function set_lockstyle()
 	send_command('wait 2; input /lockstyleset 11')
 end
-
