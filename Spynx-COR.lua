@@ -55,7 +55,6 @@ function user_setup()
 
 	-- Useful states
 	state.ForceCompensator = M(false, 'Force Compensator')
-	state.WeaponLock = M(false, 'Weapon Lock')
 	state.CP = M(false, "Capacity Points Mode")
 	state.MDshot = M(false, "Magic Damage Bonus Shot")
 	
@@ -64,8 +63,6 @@ function user_setup()
 	
 	
 	send_command('bind ^l gs c toggle ForceCompensator')
-	send_command('bind ^m gs c toggle WeaponLock')
-	--send_command('bind ^c gs c toggle CP')
 	send_command('bind ^b gs c toggle MDshot')
 	
 	-- QD toogles
@@ -78,7 +75,7 @@ function user_setup()
 	send_command('bind ^[ gs rh enable')
 	send_command('bind ^] gs rh disable')	
 	send_command('bind ^; gs rh set "Last Stand"')
-	send_command('bind ^\' gs rh set')
+	send_command('bind ^\' gs rh set "Leaden Salute"')
 	send_command('bind ^c gs rh clear')
 	
 	-- Gears
@@ -88,6 +85,17 @@ function user_setup()
 	gear.MAbullet = "Orichalc. Bullet"
 	gear.QDbullet = "Animikii Bullet"
 	options.ammo_warning_limit = 5
+	
+	-- Weapon sets
+	state.WeaponSets = M{['description']='Weapon set', 'Melee', 'Ranged', 'Magic'}
+	WeaponSetsGear = { 
+		["Melee"] = {main="Kaja Sword",sub="Blurred Knife +1",range="Anarchy +2"},
+		["Ranged"] = {main="Kustawi +1",sub="Nusku Shield", range="Fomalhaut"},
+		["Magic"] = {main="Kaja Sword",sub="Kaja Knife",range="Fomalhaut"},
+	}	
+	
+	send_command('bind ^. gs c cycleback WeaponSets')
+	send_command('bind ^/ gs c cycle WeaponSets')
 	
     select_default_macro_book()
 end
@@ -108,7 +116,9 @@ function user_unload()
 	send_command('unbind ^[')
 	send_command('unbind ^]')
 	send_command('unbind @h')
-	send_command('unbind ^;')	
+	send_command('unbind ^;')
+	send_command('unbind ^.')
+	send_command('unbind ^/')	
 end
 
 -- Define sets and vars used by this job file.
@@ -125,7 +135,7 @@ function init_gear_sets()
     -- Precast sets
     --------------------------------------
 	sets.precast.JA['Random Deal'] = {body="Lanun Frac"}
-	sets.precast.JA['Wild Card'] = {feet="Lanun Bottes"}
+	sets.precast.JA['Wild Card'] = {feet="Lanun Bottes +3"}
 	
 	sets.precast.FC = {
 		head="Carmine Mask +1", 	--	14
@@ -190,11 +200,11 @@ function init_gear_sets()
 		body="Laksa. Frac +3",
 		hands="Meg. Gloves +2",
 		legs="Meg. Chausses +2",
-		feet="Meg. Jam. +2",
+		feet="Lanun Bottes +3",
 		neck="Fotia Gorget",
 		ear1="Ishvara Earring",
 		ear2="Moonshade Earring",
-		ring1="Dingir Ring",
+		ring1="Epaminondas's Ring",
 		ring2="Regal Ring",
 		back=gear.COR_WSPhys_Cape,
 		waist="Fotia Belt",
@@ -206,7 +216,7 @@ function init_gear_sets()
 		body="Samnuha Coat",
 		hands=gear.Carmine_LS_hands,
 		legs=gear.Herc_MAB_legs,
-		feet=gear.Herc_MAB_feet,
+		feet="Lanun Bottes +3",
 		neck="Sanctity Necklace",
 		waist="Eschan Stone",
 		ear1="Friomisi Earring",
@@ -232,6 +242,7 @@ function init_gear_sets()
 		head="Meghanada Visor +2",
 		neck="Iskur Gorget",
 		ear2="Telos Earring",
+		feet="Meg. Jam. +2",
 		ring1="Cacoethic Ring +1",
 		waist="Kwahu Kachina Belt",
 	})
@@ -250,7 +261,7 @@ function init_gear_sets()
 		back=gear.COR_SB_Cape,
 		waist="Prosilio Belt +1",
 		legs=gear.Herc_SB_legs,
-		feet=gear.Herc_SB_feet
+		feet="Lanun Bottes +3"
 	}
 	
 	sets.precast.WS["Savage Blade"].FullTP = set_combine(sets.precast.WS["Savage Blade"],{
@@ -357,21 +368,20 @@ function init_gear_sets()
     --------------------------------------
     -- Idle sets (default idle set not needed since the other three are defined, but leaving for testing purposes)
     sets.idle = {					-- PDT	MDT
-		range="Fomalhaut",			
 		ammo=gear.RAbullet,
 		head=gear.Herc_DT_head,		-- 4	4
 		body="Meg. Cuirie +2",		-- 8
 		hands=gear.Herc_DT_hands,	-- 6	4
 		legs="Carmine Cuisses +1",	
-		feet="Meg. Jam. +2",		-- 3
+		feet="Lanun Bottes +3",		-- 6
 		neck="Loricate Torque +1",	-- 6	6
 		waist="Flume Belt +1",		-- 4
 		ear1="Odnowa Earring +1",	-- 		2
-		ear2="Etiolation Earring",	-- 3	3
+		ear2="Etiolation Earring",	-- 		3
 		ring1="Defending Ring",		--10	10
 		ring2="Dark Ring",			-- 6	4
 		back="Moonbeam Cape"		-- 5	5
-	}								--57	38
+	}								--55	38
 	
 	sets.idle.DT = set_combine(sets.idle,{legs="Meghanada Chausses +2"})
 
@@ -565,16 +575,17 @@ function init_gear_sets()
 	sets.MBbonus = {feet="Chasseur's Bottes +1"}
 	
 	-- Orgnizer set
-	sets.doubleWeapon = {main="Hepatizon Sapara +1",sub="Hepatizon Sapara +1"}
-	
 	organizer_items = {
 		-- Weapons
 		dagger1="Kustawi +1",
-		dagger2="Odium",
-		dagger3="Atoyac",
+		dagger2="Kaja Knife",
+		--dagger2="Odium",
+		--dagger3="Atoyac",
 		dagger4="Blurred Knife +1",
 		shield="Nusku Shield",
 		sword1="Fettering Blade",
+		sword2="Hepatizon Sapara +1",
+		sword3="Kaja Sword",
 		gun1="Fomalhaut",
 		gun2="Compensator",
 		gun3="Anarchy +2",
@@ -745,20 +756,6 @@ function display_current_job_state(eventArgs)
         add_to_chat(104, 'Force Compensator: [Off]')
     end
 	
-	-- Weapon lock
-	if state.WeaponLock.value == true then
-        add_to_chat(104, 'Weapon Lock: [On]')
-    elseif state.WeaponLock.value == false then
-        add_to_chat(104, 'WeaponLock: [Off]')
-    end
-	
-	-- CP cape
-	if state.CP.value == true then
-        add_to_chat(104, 'CP Mode: [On]')
-    elseif state.CP.value == false then
-        add_to_chat(104, 'CP Mode: [Off]')
-    end
-	
 	-- Main QD
 	if state.Mainqd.current ~= nil then
 		add_to_chat(104, 'Current QD:'..state.Mainqd.current)
@@ -795,19 +792,11 @@ end
 
 -- Handle notifications of general user state change.
 function job_state_change(stateField, newValue, oldValue)
-	if state.WeaponLock.value == true then
-		disable('ranged')
-	else
-		enable('ranged')
+	-- Equip weapons based on mode
+	if state.WeaponSets.current then
+        equip(WeaponSetsGear[state.WeaponSets.current])
 	end
-	
-	if state.CP.current == 'on' then
-		equip(sets.CP)
-		disable('back')
-	else
-		enable('back')
-	end
-end
+ end
 
 
 -- Determine whether we have sufficient ammo for the action being attempted.
