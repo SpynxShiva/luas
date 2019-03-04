@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------------------------------------------
--- (Original: Motenten / Modified: Arislan)
+-- (Original: Motenten / Modified: Arislan / Modified: Spynx )
 -------------------------------------------------------------------------------------------------------------------
 
 --[[	Custom Features:
@@ -114,7 +114,7 @@ function init_gear_sets()
 	--[[
 	sets.precast.WS = {
 		ammo="Yetshila",
-        head="Jhakri Coronal +2",
+        head="Jhakri Coronal +1",
 		neck="Fotia Gorget",
 		ear1="Moonshade Earring",
 		ear2="Sherida Earring",
@@ -132,7 +132,7 @@ function init_gear_sets()
 	
 	sets.precast.WS['Savage Blade'] = {
 		ammo="Amar Cluster",
-        head="Jhakri Coronal +2",
+        head="Jhakri Coronal +1",
 		neck="Caro Necklace",
 		ear1="Moonshade Earring",
 		ear2="Ishvara Earring",
@@ -218,7 +218,7 @@ function init_gear_sets()
 	})
 
 	sets.midcast.Refresh = set_combine(sets.midcast.EnhancingDuration,{
-		head="Amalric Coif",		-- +1
+		head="Amalric Coif +1",		-- +1
 		body="Atrophy Tabard +2",	-- +2
 		legs="Leth. Fuseau +1", 	-- +2
 	})
@@ -233,7 +233,7 @@ function init_gear_sets()
 	sets.midcast.Aquaveil = set_combine(sets.midcast['Enhancing Magic'], {
 		main="Vadose Rod",
 		sub="Ammurapi Shield",
-		head="Amalric Coif",
+		head="Amalric Coif +1",
 		waist="Emphatikos Rope"
 	})
 
@@ -553,10 +553,12 @@ end
 
 function job_aftercast(spell, action, spellMap, eventArgs)
 	if not spell.interrupted then
+		sleepDuration = buffactive.Saboteur and 120 or 60
+		sleep2Duration = buffactive.Saboteur and 180 or 90
 		if spell.english == "Sleep II" then
-			send_command('@timers c "Sleep II ['..spell.target.name..']" 120 down spells/00259.png')
+			send_command('@timers c "Sleep II ['..spell.target.name..']" ' ..  tostring(sleep2Duration) .. ' down spells/00259.png')
 		elseif spell.english == "Sleep" or spell.english == "Sleepga" then -- Sleep & Sleepga Countdown --
-			send_command('@timers c "Sleep ['..spell.target.name..']" 90 down spells/00253.png')
+			send_command('@timers c "Sleep ['..spell.target.name..']" ' ..  tostring(sleepDuration) .. ' down spells/00253.png')
 		elseif spell.english == "Break" then
 			send_command('@timers c "Break ['..spell.target.name..']" 30 down spells/00255.png')
 		end 
