@@ -117,9 +117,9 @@ function init_gear_sets()
     sets.idle = {						--	PDT		MDT
 		main="Trishula",			
 		sub="Utu Grip",
-		ammo="Ginsen",
+		ammo="Staunch Tathlum +1",		--	2		2
 		head="Flam. Zucchetto +2",
-		body="Sulevia's Plate. +2",		--	9		9
+		body="Chozoron Coselete",		--	8		8
 		hands="Sulev. Gauntlets +2",	--	5		5
 		legs="Sulev. Cuisses +2",		--	7		7
 		feet="Sulevia's Leggings +2",	--	4		4
@@ -130,7 +130,7 @@ function init_gear_sets()
 		ring1="Defending Ring",			--	10		10
 		ring2="Moonlight Ring",			--	5		5
 		back=gear.DRG_TP_Cape
-	}									--	50		49
+	}									--	51		50
 	
 	sets.idle.Town = set_combine(sets.idle,{})
 
@@ -296,5 +296,3 @@ function select_default_macro_book()
     -- Default macro set/book
     set_macro_page(2, 11)
 end
-
-
