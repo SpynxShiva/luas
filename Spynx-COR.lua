@@ -87,11 +87,13 @@ function user_setup()
 	options.ammo_warning_limit = 5
 	
 	-- Weapon sets
-	state.WeaponSets = M{['description']='Weapon set', 'Melee', 'Ranged', 'Magic'}
+	state.WeaponSets = M{['description']='Weapon set', 'Melee', 'RangedMelee', 'RangedOnly', 'LeadenSpeed', 'LeadenPower'}
 	WeaponSetsGear = { 
-		["Melee"] = {main="Kaja Sword",sub="Blurred Knife +1",range="Anarchy +2"},
-		["Ranged"] = {main="Kustawi +1",sub="Nusku Shield", range="Fomalhaut"},
-		["Magic"] = {main="Kaja Sword",sub="Kaja Knife",range="Fomalhaut"},
+		["Melee"] = {main="Naegling",sub="Blurred Knife +1",range="Anarchy +2"},
+		["RangedMelee"] = {main="Kustawi +1",sub="Blurred Knife +1", range="Fomalhaut"},
+		["RangedOnly"] = {main="Kustawi +1",sub="Nusku Shield", range="Fomalhaut"},
+		["LeadenSpeed"] = {main="Kaja Knife",sub="Blurred Knife +1",range="Fomalhaut"},
+		["LeadenPower"] = {main="Naegling",sub="Kaja Knife",range="Fomalhaut"},
 	}	
 	
 	send_command('bind ^. gs c cycleback WeaponSets')
@@ -579,13 +581,9 @@ function init_gear_sets()
 		-- Weapons
 		dagger1="Kustawi +1",
 		dagger2="Kaja Knife",
-		--dagger2="Odium",
-		--dagger3="Atoyac",
-		dagger4="Blurred Knife +1",
+		dagger3="Blurred Knife +1",
 		shield="Nusku Shield",
-		sword1="Fettering Blade",
-		sword2="Hepatizon Sapara +1",
-		sword3="Kaja Sword",
+		sword1="Naegling",
 		gun1="Fomalhaut",
 		gun2="Compensator",
 		gun3="Anarchy +2",
@@ -778,13 +776,6 @@ function display_current_job_state(eventArgs)
 		add_to_chat(104, 'Magic Damage Bonus shot: [On]')
     elseif state.MDshot.value == false then
         add_to_chat(104, 'Magic Damage Bonus shot: [Off]')
-    end	
-	
-	-- Autows
-	if state.autows.value == true then
-        add_to_chat(104, 'AutoWS: [On]')
-    elseif state.autows.value == false then
-        add_to_chat(104, 'AutoWS: [Off]')
     end
 	
     eventArgs.handled = true
@@ -794,6 +785,7 @@ end
 function job_state_change(stateField, newValue, oldValue)
 	-- Equip weapons based on mode
 	if state.WeaponSets.current then
+		add_to_chat(104,'Equippping set:' .. state.WeaponSets.current )
         equip(WeaponSetsGear[state.WeaponSets.current])
 	end
  end
