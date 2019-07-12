@@ -22,8 +22,8 @@ end
 
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
-    state.OffenseMode:options('Normal', 'Acc')
-    state.HybridMode:options('Normal', 'Roll','DT')
+    state.OffenseMode:options('Normal', 'MidAcc', 'HighAcc')
+    state.HybridMode:options('Normal', 'DT')
     state.RangedMode:options('Normal', 'Acc')
     state.WeaponskillMode:options('Normal', 'Acc', 'Mod')
     state.PhysicalDefenseMode:options('DT')
@@ -77,7 +77,7 @@ function init_gear_sets()
 		feet=gear.Valor_WSD_feet,
 		neck="Fotia Gorget",
 		waist="Fotia Belt",
-		ear1={ name="Moonshade Earring", augments={'Accuracy+4','TP Bonus +25',}},
+		ear1="Moonshade Earring",
 		ear2="Ishvara Earring",
 		ring1="Karieyh Ring +1",
 		ring2="Epaminondas's Ring",
@@ -108,20 +108,20 @@ function init_gear_sets()
     --------------------------------------
     -- Idle sets (default idle set not needed since the other three are defined, but leaving for testing purposes)
     sets.idle = {						--	PDT		MDT
-		ammo="Staunch Tathlum +1",			--	2		2
+		ammo="Staunch Tathlum +1",		--	2		2
 		head="Loess Barbuta +1",		--	10		10
 		neck="Loricate Torque +1",		--	6		6
 		left_ear="Etiolation Earring",	-- 			3
 		right_ear="Odnowa Earring +1",	--			2
-		body="Emet Harness +1",			--	6
+		body="Chozoron Coselete",		--	8		8
 		hands="Macabre Gauntlets +1",	--	4
-		left_ring="Defending Ring",		--	10		10	
-		right_ring=gear.dark_ring,		--	6		4
+		ring1="Defending Ring",			--	10		10	
+		ring2=gear.dark_ring,			--	6		4
 		legs=gear.Ryuo_TP_legs,			--	3
 		feet="Loyalist Sabatons",		--	5
 		waist="Flume Belt +1",			--	4
-		back="Reiki Cloak",				--			8
-	}									--	56		45	
+		back="Moonbeam Cape",			--	5		5
+	}									--	63		50	
 	
     -- Defense sets
     sets.defense.DT = sets.idle
@@ -129,48 +129,57 @@ function init_gear_sets()
     
     -- Melee sets
     sets.DT = {
-		ammo="Staunch Tathlum +1",			--	2		2
-		neck="Loricate Torque +1",		--	6		6
-		left_ring="Defending Ring",		--	10		10	
-		right_ring=gear.dark_ring,--	6		4
-		back="Moonbeam Cape",			--	5		5
-	}									--	29		27
+		ammo="Staunch Tathlum +1",	--	2		2
+		neck="Loricate Torque +1",	--	6		6
+		ring1="Regal Ring",
+		ring2="Defending Ring",		--	10		10	
+		back=gear.SAM_TP_Cape,		--	10		
+	}								--	34		22
 	
 	
 	sets.engaged = {
 		ammo="Ginsen",
 		head="Flam. Zucchetto +2",
-		neck="Moonlight Nodowa",
-		left_ear="Telos Earring",
-		right_ear="Dedition Earring",
-		body="Kendatsuba Samue +1",
+		body="Kasuga Domaru +1",
 		hands="Wakido Kote +3",
+		legs="Ryuo Hakama +1",
+		feet="Ryuo Sune-Ate +1",
+		neck="Moonlight Nodowa",
+		waist="Ioskeha Belt +1",
+		ear1="Dedition Earring",
+		ear2="Telos Earring",
 		ring1="Flamma Ring",
 		ring2="Niqmaddu Ring",
-		legs="Kendatsuba Hakama +1",
-		feet="Flam. Gambieras +2",
-		waist="Ioskeha Belt +1",
-		back=gear.SAM_TP_Cape,
+		back=gear.SAM_TP_Cape
 	}
 	
-	sets.engaged.Roll = set_combine(sets.engaged,{
-		ring1="Hetairoi Ring",
-		ear2="Cessance Earring"
+	sets.engaged.MidAcc = set_combine(sets.engaged,{
+		body="Kendatsuba Samue +1",
+		legs="Kendatsuba Hakama +1",
+		feet="Flam. Gambieras +2",
 	})
 	
-	sets.idle.Town = set_combine(sets.engaged,{})
+	sets.engaged.HighAcc = set_combine(sets.engaged.MidAcc,{
+		ear1="Cessance Earring",
+		ring2="Regal Ring"
+	})
+	
+	
+	sets.idle.Town = set_combine(sets.engaged.MidAcc,{})
 		
-	sets.engaged.Acc = set_combine(sets.engaged,{ear2="Cessance Earring",ring2="Regal Ring"})
-    sets.engaged.DT = set_combine(sets.engaged,sets.DT)
-    sets.engaged.Acc.DT = set_combine(sets.engaged.Acc,sets.DT)
+	sets.engaged.DT = set_combine(sets.engaged,sets.DT)
+    sets.engaged.MidAcc.DT = set_combine(sets.engaged.MidAcc,sets.DT)
+	sets.engaged.HighAcc.DT = set_combine(sets.engaged.HighAcc,sets.DT)
 	
 	
 	sets.WakeSleep = {neck="Vim Torque +1"}
 	
 	-- Orgnizer set
 	organizer_items = {
-		gkt1="Dojikiri Yasutsuna",
-		gkt2="Norifusa +1",
+		gkt1="Masamune",
+		gkt2="Dojikiri Yasutsuna",
+		gkt3="Norifusa +1",
+		polearm="Shining One",
 		grip="Utu Grip",
 		acc_food="Sublime Sushi",
 		atk_food="Red Curry Bun",
