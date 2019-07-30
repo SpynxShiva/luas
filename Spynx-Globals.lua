@@ -40,7 +40,7 @@ function define_global_sets()
 	gear.Amal_macc_head={ name="Amalric Coif +1", augments={'INT+12','Mag. Acc.+25','Enmity-6',}}
 	
 	gear.Amal_nuke_body={ name="Amalric Doublet +1", augments={'MP+80','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
-    gear.Amal_nuke_hands={ name="Amalric Gages +1", augments={'INT+12','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
+   	gear.Amal_nuke_hands={ name="Amalric Gages +1", augments={'INT+12','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
 	gear.Amal_nuke_legs={ name="Amalric Slops +1", augments={'MP+80','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
 	gear.Amal_nuke_feet={ name="Amalric Nails +1", augments={'MP+80','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
 	
@@ -70,7 +70,7 @@ function define_global_sets()
 	gear.Herc_MAB_feet 	= { name="Herculean Boots", augments={'Mag. Acc.+19 "Mag.Atk.Bns."+19','Weapon skill damage +2%','MND+5','"Mag.Atk.Bns."+14',}}
 	
 	gear.Herc_RA_head = { name="Herculean Helm", augments={'Rng.Acc.+20 Rng.Atk.+20','AGI+15',}}
-    gear.Herc_RA_legs = { name="Herculean Trousers", augments={'Rng.Acc.+25 Rng.Atk.+25','AGI+11','Rng.Acc.+3','Rng.Atk.+14',}}
+    	gear.Herc_RA_legs = { name="Herculean Trousers", augments={'Rng.Acc.+25 Rng.Atk.+25','AGI+11','Rng.Acc.+3','Rng.Atk.+14',}}
 	
 	gear.Herc_Ref_head={ name="Herculean Helm", augments={'Enmity-1','Attack+20','"Refresh"+2','Accuracy+12 Attack+12','Mag. Acc.+11 "Mag.Atk.Bns."+11',}}
 	gear.Herc_Ref_hands = { name="Herculean Gloves", augments={'Accuracy+14','STR+6','"Refresh"+2',}}
@@ -114,11 +114,11 @@ function define_global_sets()
 	gear.Valor_STP_legs = { name="Valor. Hose", augments={'Accuracy+28','"Store TP"+6','STR+7',}}
 	
 	
-	gear.Valor_WSD_head	={ name="Valorous Mask", augments={'Accuracy+18 Attack+18','Weapon skill damage +3%','AGI+8','Accuracy+12','Attack+9',}}
+	gear.Valor_WSD_head	={ name="Valorous Mask", augments={'Attack+2','Weapon skill damage +4%','STR+12','Accuracy+15',}}
 	gear.Valor_WSD_body	={ name="Valorous Mail", augments={'Accuracy+25','Weapon skill damage +4%','STR+8','Attack+12',}}
 	gear.Valor_WSD_legs	={ name="Valor. Hose", augments={'Accuracy+7 Attack+7','Weapon skill damage +4%','Accuracy+10',}}
-	gear.Valor_WSD_feet	={ name="Valorous Greaves", augments={'Attack+27','Weapon skill damage +4%','STR+9','Accuracy+8',}}
-    gear.Valor_WSD_hands={ name="Valorous Mitts", augments={'Accuracy+24','Weapon skill damage +4%','AGI+8','Attack+15',}}
+	gear.Valor_WSD_feet	={ name="Valorous Greaves", augments={'Accuracy+17 Attack+17','Weapon skill damage +3%','STR+10','Accuracy+5','Attack+5',}}
+    	gear.Valor_WSD_hands={ name="Valorous Mitts", augments={'Accuracy+24','Weapon skill damage +4%','AGI+8','Attack+15',}}
 	
 	
 	-- Odyssean
