@@ -137,10 +137,6 @@ function set_hud_info()
 			'     Casting: \\cs(125,125,255)'..tostring(state.CastingMode.value)..'\\cr',
 			'     DT: \\cs(125,125,255)'..tostring(state.damagetaken.value)..'\\cr',
 			'     Pet DT: \\cs(125,125,255)'..tostring(state.petdamagetaken.value)..'\\cr',
-			'     Capacity Points: \\cs(125,125,255)'..tostring(state.cpmode.value)..'\\cr',
-			'     Movement: \\cs(125,125,255)'..tostring(state.movement.value)..'\\cr',
-			'     TP/Staff Lock: \\cs(125,125,255)'..tostring(state.tplock.value)..'\\cr',
-			'     Impact Debuff: \\cs(125,125,255)'..tostring(state.impactmode.value)..'\\cr',
 			'     Favor: \\cs(125,125,255)'..tostring(state.favor.value)..'\\cr',
 			'     Magic Burst: \\cs(125,125,255)'..tostring(state.burstmode.value)..'\\cr',
 		}
@@ -261,13 +257,6 @@ function job_setup()
 	    'Flaming Crush'
     }
  
-    sets.cpmode = {back="Mecisto. Mantle"}
---    sets.dtmode = {
---	    main="Earth Staff",
---	    left_ring="Gelatinous Ring +1",
---	    right_ring="Defending Ring",
---    }
- 
     pacts = {}
     pacts.cure = {['Carbuncle']='Healing Ruby'}
     pacts.curaga = {['Carbuncle']='Healing Ruby II', ['Garuda']='Whispering Wind', ['Leviathan']='Spring Water'}
@@ -334,21 +323,7 @@ function job_setup()
         ['Dream Shroud'] = 180,
         ['Reraise II'] = 3600
     }
-    -- Icons to use when creating the custom timer.
---    wards.icons = {
---        ['Earthen Armor']   = 'spells/00299.png', -- 00299 for Titan
---        ['Shining Ruby']    = 'spells/00043.png', -- 00043 for Protect
---        ['Dream Shroud']    = 'spells/00304.png', -- 00304 for Diabolos
---        ['Noctoshield']     = 'spells/00106.png', -- 00106 for Phalanx
---        ['Inferno Howl']    = 'spells/00298.png', -- 00298 for Ifrit
---        ['Hastega']         = 'spells/00358.png', -- 00358 for Hastega
---        ['Hastega II']         = 'spells/00358.png', -- 00358 for Hastega
---        ['Rolling Thunder'] = 'spells/00104.png', -- 00358 for Enthunder
---        ['Frost Armor']     = 'spells/00250.png', -- 00250 for Ice Spikes
---        ['Lightning Armor'] = 'spells/00251.png', -- 00251 for Shock Spikes
---        ['Reraise II']      = 'spells/00135.png', -- 00135 for Reraise
---        ['Fleet Wind']      = 'abilities/00074.png', --
---    }
+
 	if custom_includes then 
 		include('custom_aliases.lua')
 	end
@@ -416,21 +391,12 @@ function user_unload()
     send_command('unbind ^[')
     send_command('unbind ![')
     send_command('unbind ^]')
-    --send_command('unbind %numpad1 setkey f8 down;wait .1;setkey f8 up;input /pet "Heavenly Strike" <t>')
-    --send_command('unbind %numpad3 setkey f8 down;wait .1;setkey f8 up;input /pet "Sleepga" <t>')
     send_command('unbind %numpad3')
     send_command('unbind !%numpad.')
 end
 -------------------------------------------------------------------------------------------------------------------
 -- Job-specific hooks for standard casting events.
 -------------------------------------------------------------------------------------------------------------------
- 
---swapspaused = false
---function pauseswaps(seconds)
---	swapspaused = true
---	coroutine.sleep(seconds)
---	swapspaused = false
---end
 
 is_midpact = false
 function check_midpact(spell,eventArgs)
@@ -449,12 +415,7 @@ function check_midpact(spell,eventArgs)
         eventArgs.handled = true
 		return true
     end
---    if (spell.type == "BloodPactRage" and recast[173] == 0) or (spell.type=="BloodPactWard" and recast[174] == 0) then 
---	swapspaused = true
---	coroutine.schedule(function()
---		swapspaused = false
---	end, 3000)
---    end
+
     if pet_midaction() then
 		d_chat('Avatar Midaction, cancelling')
         eventArgs.handled = true
@@ -466,19 +427,10 @@ end
 -- Set eventArgs.useMidcastGear to true if we want midcast gear equipped on precast.
 function job_precast(spell, action, spellMap, eventArgs)
 	d_chat("Job Precast")
---    if state.damagetaken.value ~= "None" then 
---	    tempset = {}
---	    pr (eventArgs)
---	    pr(action)
---    end
---
-    --if swapspaused then eventArgs.handled = true end
-    beforemp = player.mp
+
+	beforemp = player.mp
     is_midpact = check_midpact(spell,eventArgs)
---    if is_midpact then 
---	    d_chat('job_precast return due to midpact')
---	    return 
---    end
+
     if buffactive['Astral Conduit'] and conduit_lock then
         eventArgs.handled = true
     end
@@ -487,7 +439,6 @@ function job_precast(spell, action, spellMap, eventArgs)
     end
     if state.damagetaken.value ~= "None" then 
 	    state.CastingMode:set('PDT')
-	    --eventArgs.handled = true
     elseif state.CastingMode.value == 'PDT' then 
 	    state.CastingMode:reset()
     end
@@ -499,47 +450,18 @@ function job_midcast(spell, action, spellMap, eventArgs)
 	if spellMap == nil and spell.skill=="Enhancing Magic" then
 		spellMap="Enhancing Magic"
 	end
-    --print ('check '..check)
---    if is_midpact then 
---	    d_chat('job_midcast return due to midpact')
---	    return 
---    end
-    --print (spell.english)
-    --print(spell.type)
-    --if state.Buff['Astral Conduit'] and pet_midaction() then
-    --    eventArgs.handled = true
-    --end
---    elseif spell.type=='SummonerPact' then
---	equip(sets.midcast.interruption)
---        eventArgs.handled = true
---    end
 end
+
 function job_post_midcast(spell, action, spellMap, eventArgs)
 end
+
 function job_pet_midcast(spell,action,spellMap,eventArgs)
     d_chat('Pet Midcast')
 end
-sets.cait = {
-	hands="Lamassu Mitts +1"
-}
+
 function job_post_pet_midcast(spell,action,spellMap,eventArgs)--override equip sets for bloodpacts without lots of messy sets
 	d_chat('Pet Post Midcast')
-	if pet.name=='Cait Sith' then
-		--equip({ hands="Lamassu Mitts +1", })
-	elseif pet.name=='Carbuncle' then
-		--equip({ hands="Asteria Mitts +1", })
-	end
---	if state.bpmagicacc.current=='on' and (spellMap == 'TPMagicalBloodPactRage' or spellMap == 'MagicalBloodPactRage' or spellMap == 'IfritMagicalBloodPactRage') then
---		spellMap = spellMap .. ".Acc"
---	--if state.bpmagicacc.current=='on' then
---		equip(sets.bp_magic_acc)
---	end
---	if state.bpmagicacc.current=='on' and (spellMap == 'PhysicalBloodPactRage') then
---		equip(sets.bp_phys_acc)
---	end
---	if state.bpmagicacc.current=='on' and (spellMap == 'HybridBloodPactRage') then
---		equip(sets.bp_hybrid_acc)
---	end
+	
 	if state.burstmode.value=='Burst' and enticersRagePacts:contains(spell.english) and spell.english~="Impact" then
 		equip(sets.burstmode.Burst)
 	end
@@ -548,19 +470,9 @@ function job_aftercast(spell, action, spellMap, eventArgs)
 	if spell.type=="BloodPactRage" or spell.type=="BloodPactWard" then
 		eventArgs.handled=true
 	end
---	if pet_midaction() then
---		eventArgs.handled=true
---	end
-	--if swapspaused then eventArgs.handled = true end
+
 	is_midpact = check_midpact(spell,eventArgs,false)
 	d_chat('Job Aftercast')
-	--if is_midpact then return end
-
-	--print('spell '..spell.type..' aftercast')
-	--handle_equipping_gear(player.status,pet.status)
-	--    if spell.type == 'Summoning' then
-	--	return 'idle.Avatar'
-	--    end
 end
  
 -- Runs when pet completes an action.
@@ -569,40 +481,6 @@ function job_pet_aftercast(spell, action, spellMap, eventArgs)
 	d_chat('Job Pet Aftercast')
 	d_chat('player status is'..player.status)
 	handle_equipping_gear(player.status,pet.status)
-	--if is_midpact then return end
---	if is_midpact then 
---		d_chat('job_pet_aftercast returned due to midpact')
---		return
---	end
-
-	--d_chat('check is '..tostring(is_midpact))
-	--add_to_chat(122,'Player Status is '..player.status)
-	--    if not spell.interrupted and spell.type == 'BloodPactWard' and spellMap ~= 'DebuffBloodPactWard' then
-	--        wards.flag = true
-	--        wards.spell = spell.english
-	--        send_command('wait 4; gs c reset_ward_flag')
-	--    end
-	--    if player.status == 'Engaged' then
-	--	equip(sets.engaged)
-	--    end
---	aftermp = player.mp
---	diffmp = beforemp - aftermp
---	savemp = 100*diffmp/248
---	savemp = tonumber(string.format("%.3f", savemp))
-	--if(spell.en == "Hastega II" and diffmp < 248) then add_to_chat (122,'Blood Boon! Cost was about '..savemp..'% ['..diffmp..'] before:'..beforemp..' after:'..aftermp) end
-	--handle_equipping_gear(player.status,pet.status)
-	--print ('pet aftercast '..pet.status..' action '..action)
-	--    if pet.isvalid and pet.status == 'Engaged'  then
-	--	    print('pet aftercast')
-	--	    equip(sets.Avatar.Haste)
-	--	    return 'Avatar.Haste'
-	--    end
-	--    if pet.isvalid and not midaction() and not pet_midaction() then
-	--	    if player.status == "Idle" then
-	--		    --equip(sets.idle.Avatar)
-	--		    return 'idle.Avatar'
-	--	    end
-	--    end
 end
  
 -------------------------------------------------------------------------------------------------------------------
@@ -632,8 +510,6 @@ end
 -- Called when the player's pet's status changes.
 -- This is also called after pet_change after a pet is released.  Check for pet validity.
 function job_pet_status_change(newStatus, oldStatus, eventArgs)
---   local check = check_midpact(spell,eventArgs)
-    --d_chat('Pet Status Change new '..newStatus..' old '..oldStatus..' player'..player.status..' midaction '..tostring(pet_midaction())..' is_midpact '..tostring(is_midpact))
     d_chat('Pet Status Change new '..newStatus..' old '..oldStatus..' player'..player.status..' midaction '..tostring(pet_midaction()))
     if pet_midaction() then 
 	    --d_chat('check is '..tostring(is_midpact))
@@ -703,23 +579,17 @@ end
 -------------------------------------------------------------------------------------------------------------------
 -- Custom spell mapping.
 function job_get_spell_map(spell)
-	--print(pet.tp)
-	--print(pet_tp)
 	spellMapMod = ""
 	if state.bpmagicacc.current=='on' then
 		spellMapMod = "Acc"
 	end
 	if spell.type == 'BloodPactRage' then
-		if spell.english == "Impact" and state.impactmode.value==true then
-			return 'DebuffBloodPactWard'
-		elseif spell.english == "Tail Whip" then
+		if spell.english == "Tail Whip" then
 			return 'DebuffBloodPactWard'
 		elseif (meritPacts:contains(spell.english) and pet_tp < 749) then
 			return 'TPMagicalBloodPactRage'..spellMapMod
 		elseif (enticersRagePacts:contains(spell.english) and pet_tp < 2350) then
-			--elseif enticersRagePacts:contains(spell.english) and spell.english ~= 'Impact' then
 			return 'TPMagicalBloodPactRage'..spellMapMod
-			--return 'MagicalBloodPactRage'
 		elseif (physicalEnticersRagePacts:contains(spell.english) and pet_tp < 2350) then
 			return 'TPPhysicalBloodPactRage'..spellMapMod
 		elseif hybridPacts:contains(spell.english) then
@@ -771,23 +641,14 @@ function customize_idle_set(idleSet)
 		if sets.perp[pet.name] then
 			idleSet = set_combine(idleSet, sets.perp[pet.name])
 		end
---		gear.perp_staff.name = elements.perpetuance_staff_of[pet.element]
---		if gear.perp_staff.name and (player.inventory[gear.perp_staff.name] or player.wardrobe[gear.perp_staff.name]) then
---			idleSet = set_combine(idleSet, sets.perp.staff_and_grip)
---		end
 		if state.Buff["Avatar's Favor"] and avatars:contains(pet.name) then
-			--idleSet = set_combine(idleSet, sets.idle.Avatar.Favor)
 			idleSet = set_combine(idleSet,sets.favor[state.favor.value])
 		end
 		if pet.status == 'Engaged' then
 			idleSet = set_combine(idleSet, sets.Avatar.Haste)
 		end
 	end
---	if player.max_mp - player.mp < 100 and usemephitas then
---		if pet.isvalid then idleSet = set_combine(idleSet, {right_ring="Mephitas's Ring +1" })
---		else idleSet = set_combine(idleSet, {right_ring="Mephitas's Ring +1"})
---		end
---	end
+
 	if pet.name=='Cait Sith' then
 		--idleSet = set_combine(idleSet, {hands="Lamassu Mitts +1"})
 	end
@@ -799,44 +660,8 @@ function customize_idle_set(idleSet)
 	if state.damagetaken.value ~= "None" then idleSet = set_combine(idleSet,sets.damagetaken[state.damagetaken.value]) end
 	if state.petdamagetaken.value ~= "None" then idleSet = set_combine(idleSet,sets.petdamagetaken[state.petdamagetaken.value]) end
 
-	if areas.Cities:contains(world.area) and world.area:contains("Adoulin") then
-		idleSet = set_combine(idleSet, sets.adoulinmovement)
-		--windower.send_command('input /ja Release <me>;wait 2;input /ma '..tosummon..' <me>')
-	elseif buffactive["Quickening"] or buffactive["Fleet Wind"] or areas.Cities:contains(world.area) then
-		if pet.isvalid and not  areas.Cities:contains(world.area) then
-			idleSet = set_combine(idleSet, sets.movement)
-		else
-			idleSet = set_combine(idleSet, sets.movementtown)
-		end
-	elseif state.movement.current == 'on' then 
-		idleSet = set_combine(idleSet, sets.movement)
-	end
-	if  world.area:contains("Mog Garden") then
-		idleSet = set_combine(idleSet, sets.farmer)
-	end
-
-	
-	if state.cpmode.current == 'on' then idleSet = set_combine(idleSet,sets.cpmode) end
-	if state.tplock.current == 'on' then 
-		idleSet = set_combine(idleSet,sets.tplock) 
-		equip(idleSet)
-		disable('main','sub')
-	elseif state.kclub.current == 'on' then 
-		idleSet = set_combine(idleSet,sets.kclub) 
-		equip(idleSet)
-		disable('main','sub')
-	elseif state.pullmode.current == 'on' then 
-		--disable('main','sub')
-	else
-		enable('main','sub')
-	end
-	if state.pullmode.current == 'on' then idleSet = set_combine(idleSet,sets.pullmode) end
-	if state.idlehealer.current == 'on' then idleSet = set_combine(idleSet,sets.idlehealer) end
 	if state.magiceva.current == 'on' then idleSet = set_combine(idleSet,sets.magiceva) end
 	
-	if inwkr == 1 then 
-		idleSet = set_combine(idleSet, sets.inwkr)
-	end
 	equip(idleSet)
 
 	return idleSet
@@ -845,38 +670,18 @@ end
 function customize_melee_set(meleeSet)
     if state.damagetaken.value ~= "None" then meleeSet = set_combine(meleeSet,sets.damagetaken[state.damagetaken.value]) end
     if state.petdamagetaken.value ~= "None" then meleeSet = set_combine(meleeSet,sets.petdamagetaken[state.petdamagetaken.value]) end
-    if state.cpmode.current == 'on' then meleeSet = set_combine(meleeSet,sets.cpmode) end
-    if state.tplock.current == 'on' then 
-	    meleeSet = set_combine(meleeSet,sets.tplock) 
-	    equip(meleeSet)
-	    disable('main','sub')
-    elseif state.kclub.current == 'on' then 
-	    meleeSet = set_combine(meleeSet,sets.kclub) 
-	    equip(meleeSet)
-	    disable('main','sub')
-    elseif state.pullmode.current == 'on' then 
-	    --disable('main','sub')
-    else
-	    enable('main','sub')
-    end
-    if state.OffenseMode.value == 'Perp' then
+    
+	if state.OffenseMode.value == 'Perp' then
 	    if pet.status == 'Engaged' then
 		    meleeSet = set_combine(meleeSet, sets.Avatar.Haste)
 	    end
     end
-    if state.pullmode.current == 'on' then meleeSet = set_combine(meleeSet,sets.pullmode) end
-    if state.idlehealer.current == 'on' then idleSet = set_combine(idleSet,sets.idlehealer) end
-    if state.magiceva.current == 'on' then meleeSet = set_combine(meleeSet,sets.magiceva) end
-    if inwkr == 1 then 
-	    meleeSet = set_combine(meleeSet, sets.inwkr)
-    end
-    return meleeSet
-    --if state.dtmode.current == 'on' then meleeSet = set_combine(meleeSet,sets.dtmode) end
+    
+	return meleeSet
 end
 function customize_resting_set(restingSet)
     if state.damagetaken.value ~= "None" then restingSet = set_combine(meleeSet,sets.damagetaken[state.damagetaken.value]) end
 	
-    if state.cpmode.current == 'on' then restingSet = set_combine(restingSet,sets.cpmode) end
     return restingSet
 end
 
@@ -999,15 +804,7 @@ function job_self_command(cmdParams, eventArgs)
 	    updatedisplay()
     elseif cmdParams[1] == 'force_hud_refresh' then
 	    updatedisplay()
-    elseif cmdParams[1] == 'toggle' and cmdParams[2]=='cpmode' then
-	--logic is reversed b/c it's true/false and lags behind motes toggle since this is called first
-	if state.cpmode.current ~= 'on' then 
-		equip(sets.cpmode) 
-		send_command('gs disable back')
-	else
-		send_command('gs enable back')
-	end
-    elseif cmdParams[1] == "switch_dualbox_binds" then -- disables stp_m1 to stp_m10 for dual box commands, or enables them
+   elseif cmdParams[1] == "switch_dualbox_binds" then -- disables stp_m1 to stp_m10 for dual box commands, or enables them
 	    if use_dualbox then
 		    if cureIV then
 			    send_command('alias stp_m1 input /ma "Cure IV" <p0>')
@@ -1294,4 +1091,3 @@ function update_pet_tp(id,data)
 	end
 end
 id = windower.raw_register_event('incoming chunk', update_pet_tp)
-
