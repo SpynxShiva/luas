@@ -37,8 +37,8 @@ sets.petmab = {
     head={ name="Helios Band", augments={'Pet: Attack+26 Pet: Rng.Atk.+26','Pet: "Dbl. Atk."+8','Blood Pact Dmg.+6',}},
     body="Con. Doublet +2",
 	hands={ name="Merlinic Dastanas", augments={'Pet: Accuracy+24 Pet: Rng. Acc.+24','Blood Pact Dmg.+10','Pet: STR+8',}},
-    legs={ name="Apogee Slacks", augments={'Pet: STR+15','Blood Pact Dmg.+13','Pet: "Dbl. Atk."+3',}},
-    feet={ name="Helios Boots", augments={'Pet: Attack+30 Pet: Rng.Atk.+30','Pet: "Dbl. Atk."+8','Blood Pact Dmg.+5',}},
+    legs= "Apogee Slacks +1",
+    feet= "Helios Boots",
     neck="Adad Amulet",
     waist="Regal Belt",
     ear1="Gelos Earring",
@@ -63,8 +63,8 @@ sets.smnskill = {
 	feet="Apogee Pumps",
 	neck="Incanter's Torque",	--10
 	waist="Kobo Obi",			-- 8
-	left_ear="Andoaa earring",	-- 5
-	right_ear="Evans earring",	-- 5
+	ear1="Cath Palug Earring",	-- 5
+	ear2="Andoaa earring",		-- 5
 	ring1="Stikini Ring +1",		-- 5
 	ring2="Stikini Ring +1",		-- 5
 	back=gear.SMN_skill_Cape	--11
@@ -94,13 +94,13 @@ sets.midcast.Pet.PhysicalBloodPactRage = { --does physical damage only, like pre
     head={ name="Helios Band", augments={'Pet: Attack+26 Pet: Rng.Atk.+26','Pet: "Dbl. Atk."+8','Blood Pact Dmg.+6',}},
     body="Convoker's Doublet +3",
 	hands={ name="Merlinic Dastanas", augments={'Pet: Accuracy+24 Pet: Rng. Acc.+24','Blood Pact Dmg.+10','Pet: STR+8',}},
-    legs={ name="Apogee Slacks", augments={'Pet: STR+15','Blood Pact Dmg.+13','Pet: "Dbl. Atk."+3',}},
-    feet={ name="Helios Boots", augments={'Pet: Attack+30 Pet: Rng.Atk.+30','Pet: "Dbl. Atk."+8','Blood Pact Dmg.+5',}},
+    legs="Apogee Slacks +1",
+    feet="Helios Boots",
     neck="Shulmanu Collar",
     waist="Incarnation Sash",
     ear1="Gelos Earring",
     ear2="Lugalbanda Earring",
-    ring1="Varar Ring +1",
+    ring1="Cath Palug ring",
     ring2="Varar Ring +1",
     back=gear.SMN_phys_Cape
 }
@@ -334,6 +334,14 @@ sets.midcast['Enfeebling Magic'] = {
 	back="Izdubar Mantle"
 }
 
+sets.precast.FC.Impact = set_combine(sets.precast.FC, {head=empty,body="Twilight Cloak"})
+sets.midcast.Impact = set_combine(sets.midcast['Elemental Magic'], {head=empty,body="Twilight Cloak"})
+
+sets.precast.FC['Dispelga'] = set_combine(sets.precast.FC,{main="Daybreak"})
+sets.midcast["Dispelga"] = set_combine(sets.midcast['Enfeebling Magic'],{main="Daybreak"})
+
+
+
 sets.midcast.interruption = sets.precast.Interrupt
 
 --[#12 Idle/DT sets ]--
@@ -352,7 +360,7 @@ sets.idlekeep = {
 
 -- Idle sets
 sets.idle = {
-	main="Bolelabunga",
+	main="Daybreak",
 	sub="Genmei Shield",
 	ammo="Staunch Tathlum +1",
 	head="Beckoner's Horn +1",
@@ -362,25 +370,27 @@ sets.idle = {
 	feet="Apogee Pumps",
 	neck="Loricate Torque +1",
 	waist="Fucho-no-Obi",
-	ear1="Etiolation Earring",
+	ear1="Cath Palug Earring",
 	ear2="Genmei Earring",
-	ring1="Defending Ring",
-	ring2="Gelatinous Ring +1",
+	ring1="Stikini Ring +1",
+	ring2="Stikini Ring +1",
 	back="Moonbeam Cape",
 }
 
 sets.damagetaken = {}
 
 sets.damagetaken.None = {}
-sets.damagetaken.DT = {}
-sets.damagetaken.PDT = {
-	main="Mafic Cudgel", --10
-	sub="Genmei Shield", --10
+sets.damagetaken.DT = {
+	main="Mafic Cudgel", 		--10
+	sub="Genmei Shield", 		--10
+	neck="Loricate Torque +1",	-- 6
+	ring1="Defending Ring", 	--10
+	ring2="Gelatinous Ring +1", -- 7
+	back="Moonbeam Cape",		-- 5
 }
-sets.damagetaken.MDT = {}
+
 sets.magiceva = {}
-sets.pullmode = set_combine(sets.damagetaken.MDT,{})
-sets.pullmode2 = {}
+
 sets.petdamagetaken = {}
 sets.petdamagetaken.DT = {
 	neck="Empath Necklace",
@@ -393,7 +403,7 @@ sets.petdamagetaken.DT = {
 sets.petdamagetaken.Full = sets.petdamagetaken.DT
 
 sets.precast.FC.PDT = set_combine(sets.precast.FC, sets.damagetaken.PDT)
-sets.idle.PDT = sets.idle
+sets.idle.PDT = set_combine(sets.idle,sets.damagetaken.PDT )
 
 --[#13 Perp Sets ]--
 sets.idle.Avatar = set_combine(sets.idle,{ 
@@ -407,21 +417,19 @@ sets.idle.Avatar = set_combine(sets.idle,{
 	feet="Apogee Pumps",
 	neck="Caller's Pendant",
 	waist="Lucidity Sash",
-	left_ear="Etiolation Earring",
-	right_ear="Evans earring",
+	ear1="Cath Palug Earring",
+	ear2="Evans earring",
 	ring1="Defending Ring",
 	ring2="Evoker's Ring",
 	back=gear.SMN_idle_Cape,
 })
+
 sets.favor= set_combine(sets.idle.Avatar,{
 	neck="Caller's Pendant",
-	ear1="Andoaa Earring",
 	ring1="Stikini Ring +1"
 })
 sets.favor.mpsaver=sets.favor
 sets.favor.allout=set_combine(sets.idle.Avatar,{
-	neck="Incanter's Torque",
-	ear1="Andoaa Earring",
 	ring1="Stikini Ring +1",
 	ring2="Stikini Ring +1",
 	back=gear.SMN_skill_Cape
