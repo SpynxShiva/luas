@@ -118,8 +118,8 @@ function init_gear_sets()
 		main="Trishula",			
 		sub="Utu Grip",
 		ammo="Staunch Tathlum +1",		--	2		2
-		head="Flam. Zucchetto +2",
-		body="Chozoron Coselete",		--	8		8
+		head="Hjarrandi Helm",
+		body="Hjarrandi Breastplate",	--	8		8
 		hands="Sulev. Gauntlets +2",	--	5		5
 		legs="Sulev. Cuisses +2",		--	7		7
 		feet="Sulevia's Leggings +2",	--	4		4
@@ -146,30 +146,30 @@ function init_gear_sets()
 		ammo="Ginsen",
 		head="Flam. Zucchetto +2",
 		body="Dagon breastplate",
-		hands="Sulev. Gauntlets +2",
-		legs=gear.Valor_DA_legs,
+		hands="Acro Gauntlets",
+		legs=gear.Valor_STP_legs,
 		feet="Flam. Gambieras +2",
 		neck="Anu Torque",
 		waist="Ioskeha Belt +1",
 		ear1="Sherida Earring",
-		ear2="Brutal Earring",
+		ear2="Dedition Earring",
 		ring1="Flamma Ring",
 		ring2="Niqmaddu Ring",
 		back=gear.DRG_TP_Cape
 	}
+	
 	sets.engaged.Acc = set_combine(sets.engaged,{
-		body=gear.Valor_STP_body,
-		neck="Combatant's Torque",
-		ear2="Cessance Earring",
+		hands="Sulevia's Gauntlets +2",
+		legs="Sulev. Cuisses +2",
 	})
 	
 	sets.engaged.HighAcc = set_combine(sets.engaged.Acc,{
-		legs="Sulev. Cuisses +2",
-		ear1="Telos Earring"
+		neck="Combatant's Torque",
+		ear1="Telos Earring",
+		ear2="Cessance Earring",
 	})
 	
 	sets.DT = {							--	PDT		MDT
-		head="Loess Barbuta +1",		--
 		ammo="Staunch Tathlum +1",		--	2		2
 		neck="Loricate Torque +1",		--	6		6
 		ring1="Defending Ring",			--	10		10
