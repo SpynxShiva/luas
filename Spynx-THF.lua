@@ -300,16 +300,19 @@ function init_gear_sets()
 		waist="Kentarch Belt +1",
 	})
 	
-	--	Hybrid
+	
+	-- Hybrid sets
 	sets.engaged.Hybrid = {
 		ear2="Suppanomimi",
-		body="Meghanada Cuirie +2",		--	7	5
-		legs="Meghanada Chausses +2",	--	6
-		ammo="Staunch Tathlum +1", 		--	2	2
-		neck="Loricate Torque +1", 		--	6	6
-		ring1="Defending Ring", 		--	10	10
-		ring2="Moonlight Ring",			--	4   4
-	}									--	35	27
+		head="Malignance Chapeau",	--  6	6
+		body="Malignance Tabard",	--	9	9
+		hands="Malignance Gloves",	--	5	5
+		legs="Malignance Tights",	--	7	7
+		feet="Malignance Boots",	--  4	4
+		ring1="Defending Ring", 	-- 10	10
+		-- TP Cape					-- 10
+									-- 51	41
+	}		
 	
 	sets.engaged.DT = set_combine(sets.engaged, sets.engaged.Hybrid)
     sets.engaged.Acc.DT = set_combine(sets.engaged.Acc, sets.engaged.Hybrid)
@@ -608,5 +611,3 @@ function select_default_macro_book()
     -- Default macro set/book
     set_macro_page(2, 8)
 end
-
-
