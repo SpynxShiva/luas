@@ -19,7 +19,7 @@ function define_global_sets()
 	gear.Adhemar_TP_head = { name="Adhemar Bonnet +1", augments={'STR+12','DEX+12','Attack+20',}}
 	
 	gear.Adhemar_RA_hands 	= { name="Adhemar Wrist. +1", augments={'AGI+12','Rng.Acc.+20','Rng.Atk.+20',}}
-	gear.Adhemar_RA_legs	= { name="Adhemar Kecks +1", augments={'AGI+12','Rng.Acc.+20','Rng.Atk.+20',}}
+	gear.Adhemar_RA_legs	={ name="Adhemar Kecks +1", augments={'AGI+12','Rng.Acc.+20','Rng.Atk.+20',}}
     
 	gear.Adhemar_SNAP_legs	={ name="Adhemar Kecks", augments={'AGI+10','"Rapid Shot"+10','Enmity-5',}}
 
@@ -29,8 +29,8 @@ function define_global_sets()
 	
 	-- Souveran
 	gear.Souv_tank_head	= { name="Souv. Schaller +1", augments={'HP+105','VIT+12','Phys. dmg. taken -4',},priority=15}
-	gear.Souv_tank_body = {name="Souveran Cuirass", augments={'HP+80','Enmity+7','Potency of "Cure" effect received +10%',},priority=15}
-	gear.Souv_tank_hands= { name="Souv. Handsch. +1", augments={'HP+65','Shield skill +15','Phys. dmg. taken -4',},priority=15}
+	gear.Souv_tank_body 	= {name="Souveran Cuirass", augments={'HP+80','Enmity+7','Potency of "Cure" effect received +10%',},priority=15}
+	gear.Souv_tank_hands	= { name="Souv. Handsch. +1", augments={'HP+65','Shield skill +15','Phys. dmg. taken -4',},priority=15}
 	gear.Souv_tank_legs	= { name="Souv. Diechlings +1", augments={'HP+105','Enmity+9','Potency of "Cure" effect received +15%',}, priority=15}
 	gear.Souv_tank_feet	= { name="Souveran Schuhs +1", augments={'HP+105','Enmity+9','Potency of "Cure" effect received +15%',},priority=15}
 	
@@ -40,7 +40,7 @@ function define_global_sets()
 	gear.Amal_macc_head={ name="Amalric Coif +1", augments={'INT+12','Mag. Acc.+25','Enmity-6',}}
 	
 	gear.Amal_nuke_body={ name="Amalric Doublet +1", augments={'MP+80','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
-   	gear.Amal_nuke_hands={ name="Amalric Gages +1", augments={'INT+12','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
+    gear.Amal_nuke_hands={ name="Amalric Gages +1", augments={'INT+12','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
 	gear.Amal_nuke_legs={ name="Amalric Slops +1", augments={'MP+80','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
 	gear.Amal_nuke_feet={ name="Amalric Nails +1", augments={'MP+80','Mag. Acc.+20','"Mag.Atk.Bns."+20',}}
 	
@@ -55,6 +55,7 @@ function define_global_sets()
 	
 	gear.Herc_Acc_feet = { name="Herculean Boots", augments={'Accuracy+21 Attack+21','"Triple Atk."+1','Accuracy+14','Attack+13',}}
 	
+	gear.Herc_critDmg_feet = { name="Herculean Boots", augments={'Accuracy+21 Attack+21','Crit. hit damage +4%','STR+3','Accuracy+8','Attack+8',}}
 	gear.Herc_CDC_body 	= { name="Herculean Vest", augments={'Accuracy+25 Attack+25','Crit. hit damage +3%','DEX+10','Accuracy+13','Attack+1',}}
 	gear.Herc_CDC_hands = { name="Herculean Gloves", augments={'Accuracy+20','Crit. hit damage +3%','DEX+13',}}
 	
@@ -63,14 +64,13 @@ function define_global_sets()
 	gear.Herc_SB_legs 	= { name="Herculean Trousers", augments={'Attack+25','Weapon skill damage +4%','STR+13','Accuracy+8',}}
 	gear.Herc_SB_feet 	= { name="Herculean Boots", augments={'Rng.Atk.+13','Weapon skill damage +3%','STR+11','Accuracy+13','Attack+3',}}
 	
-	
 	gear.Herc_MAB_head 	= { name="Herculean Helm", augments={'"Store TP"+1','"Mag.Atk.Bns."+23','Magic Damage +21','Accuracy+17 Attack+17','Mag. Acc.+18 "Mag.Atk.Bns."+18',}}
 	gear.Herc_MAB_hands = { name="Herculean Gloves", augments={'Mag. Acc.+17 "Mag.Atk.Bns."+17','Weapon skill damage +3%','MND+1','"Mag.Atk.Bns."+15',}}
 	gear.Herc_MAB_legs 	= { name="Herculean Trousers", augments={'Mag. Acc.+19 "Mag.Atk.Bns."+19','STR+5','"Mag.Atk.Bns."+14',}}
 	gear.Herc_MAB_feet 	= { name="Herculean Boots", augments={'Mag. Acc.+19 "Mag.Atk.Bns."+19','Weapon skill damage +2%','MND+5','"Mag.Atk.Bns."+14',}}
 	
 	gear.Herc_RA_head = { name="Herculean Helm", augments={'Rng.Acc.+20 Rng.Atk.+20','AGI+15',}}
-    	gear.Herc_RA_legs = { name="Herculean Trousers", augments={'Rng.Acc.+25 Rng.Atk.+25','AGI+11','Rng.Acc.+3','Rng.Atk.+14',}}
+    gear.Herc_RA_legs = { name="Herculean Trousers", augments={'Rng.Acc.+25 Rng.Atk.+25','AGI+11','Rng.Acc.+3','Rng.Atk.+14',}}
 	
 	gear.Herc_Ref_head={ name="Herculean Helm", augments={'Enmity-1','Attack+20','"Refresh"+2','Accuracy+12 Attack+12','Mag. Acc.+11 "Mag.Atk.Bns."+11',}}
 	gear.Herc_Ref_hands = { name="Herculean Gloves", augments={'Accuracy+14','STR+6','"Refresh"+2',}}
@@ -118,7 +118,7 @@ function define_global_sets()
 	gear.Valor_WSD_body	={ name="Valorous Mail", augments={'Accuracy+25','Weapon skill damage +4%','STR+8','Attack+12',}}
 	gear.Valor_WSD_legs	={ name="Valor. Hose", augments={'Accuracy+7 Attack+7','Weapon skill damage +4%','Accuracy+10',}}
 	gear.Valor_WSD_feet	={ name="Valorous Greaves", augments={'Accuracy+17 Attack+17','Weapon skill damage +3%','STR+10','Accuracy+5','Attack+5',}}
-    	gear.Valor_WSD_hands={ name="Valorous Mitts", augments={'Accuracy+24','Weapon skill damage +4%','AGI+8','Attack+15',}}
+    gear.Valor_WSD_hands={ name="Valorous Mitts", augments={'Accuracy+24','Weapon skill damage +4%','AGI+8','Attack+15',}}
 	
 	
 	-- Odyssean
@@ -136,6 +136,8 @@ function define_global_sets()
 	gear.Taeon_SNAP_body = { name="Taeon Tabard", augments={'"Snapshot"+5','"Snapshot"+4',}}
 
 	gear.Taeon_FC_body = { name="Taeon Tabard", augments={'"Fast Cast"+4',}}
+	
+	gear.Taeon_DW_feet={ name="Taeon Boots", augments={'Accuracy+20 Attack+20','"Dual Wield"+5','DEX+9',}}
 	
 	-- Telchine
 	gear.Telchine_enh_body = { name="Telchine Chas.", augments={'Enh. Mag. eff. dur. +7',}}
@@ -162,10 +164,13 @@ function define_global_sets()
 	gear.COR_WSPhys_Cape 	= { name="Camulus's Mantle", augments={'AGI+20','Rng.Acc.+20 Rng.Atk.+20','AGI+10','Weapon skill damage +10%',}}
 	gear.COR_SB_Cape 		= { name="Camulus's Mantle", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
 	gear.COR_SNAP_Cape 		= { name="Camulus's Mantle", augments={'"Snapshot"+10',}}
-	gear.COR_RA_Cape 		= { name="Camulus's Mantle", augments={'AGI+20','Rng.Acc.+20 Rng.Atk.+20','"Store TP"+10',}}
+	gear.COR_RA_Cape 		= { name="Camulus's Mantle", augments={'AGI+20','Rng.Acc.+20 Rng.Atk.+20','AGI+10','"Store TP"+10',}}
 	gear.COR_TP_Cape 		= { name="Camulus's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','Accuracy+10','"Store TP"+10','Phys. dmg. taken-10%',}}
-	gear.COR_DW_Cape		= { name="Camulus's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','"Dual Wield"+10',}}
+	gear.COR_DW_Cape		= { name="Camulus's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','"Dual Wield"+10','Phys. dmg. taken-10%',}}
 	
+	
+	
+    
 	-- SCH
 	gear.SCH_nuke_Cape 	= { name="Lugh's Cape", augments={'INT+20','Mag. Acc+20 /Mag. Dmg.+20','INT+10','"Mag.Atk.Bns."+10',}}
 	gear.SCH_FC_Cape 	= { name="Lugh's Cape", augments={'INT+1','"Fast Cast"+10',}}
@@ -188,6 +193,7 @@ function define_global_sets()
 	gear.RUN_tank_Cape 	= { name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','HP+20','Enmity+10','Parrying rate+5%',}}
 	gear.RUN_FC_Cape  	= { name="Ogma's cape", augments={'HP+60','Eva.+20 /Mag. Eva.+20','"Fast Cast"+10','Phys. dmg. taken-10%',}}
 	
+	
 
 	-- GEO
 	gear.GEO_pet_Cape	= { name="Nantosuelta's Cape", augments={'Eva.+20 /Mag. Eva.+20','Pet: "Regen"+10',}}
@@ -195,7 +201,7 @@ function define_global_sets()
 	
 	-- THF
 	gear.THF_WS_Cape = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
-    gear.THF_TP_Cape = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','"Store TP"+10',}}
+    gear.THF_TP_Cape = { name="Toutatis's Cape", augments={'DEX+20','Accuracy+20 Attack+20','"Store TP"+10','Phys. dmg. taken-10%',}}
 	
 	-- RDM
 	gear.RDM_MND_Cape = { name="Sucellos's Cape", augments={'MND+20','Mag. Acc+20 /Mag. Dmg.+20',}}
@@ -220,8 +226,8 @@ function define_global_sets()
 	gear.SMN_Phys_Cape	= { name="Campestres's Cape", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20',}}
 	
 	-- MNK
-	gear.MNK_TP_Cape 	= { name="Segomo's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','"Dbl.Atk."+10',}}
-    gear.MNK_WS_Cape	= gear.MNK_TP_Cape
+	gear.MNK_TP_Cape 	= { name="Segomo's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','"Dbl.Atk."+10','Phys. dmg. taken-10%',}}
+    gear.MNK_WS_Cape	= { name="Segomo's Mantle", augments={'STR+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
 	
 	-- DNC
 	gear.DNC_TP_Cape 	= { name="Senuna's Mantle", augments={'DEX+20','Accuracy+20 Attack+20','"Store TP"+10',}}
@@ -229,9 +235,10 @@ function define_global_sets()
 	
 	-- WHM
 	gear.WHM_FC_Cape 	= { name="Alaunus's Cape", augments={'MND+20','Mag. Acc+20 /Mag. Dmg.+20','"Fast Cast"+10',}}
+
 	
 	-- Others
-	gear.dark_ring = { name="Dark Ring", augments={'Spell interruption rate down -3%','Phys. dmg. taken -6%','Magic dmg. taken -4%',}}
+	gear.dark_ring = { name="Gelatinous Ring +1", augments={'Spell interruption rate down -3%','Phys. dmg. taken -6%','Magic dmg. taken -4%',}}
 	
 	-- Crafting gear
 	sets.crafting={
