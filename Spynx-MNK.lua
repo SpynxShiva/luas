@@ -33,6 +33,8 @@ function user_setup()
     state.WeaponskillMode:options('Normal')
 	
 	send_command('bind ^t gs c cycle TreasureMode')
+	
+	select_default_macro_book()
 end
 
 
@@ -46,9 +48,17 @@ function init_gear_sets()
         head=gear.Herc_TH_head, -- 2
         body="Volte Jupon",		-- 2
   	}
-
+	
     -- Precast Sets
-
+	sets.precast.FC = {
+		head=gear.Herc_FC_head,		--  13
+		neck="Orunmila's Torque",  	--	 5
+		ear1="Loquacious Earring", 	--	 2
+		ear2="Etiolation Earring",	-- 	 1
+		body=gear.Taeon_FC_body,	--	 8
+		hands="Leyline Gloves", 	--	 8
+	}								--	37
+	
     -- Idle sets
     sets.idle = {
 		ammo="Staunch Tathlum +1",	--  3		3
@@ -98,20 +108,22 @@ function init_gear_sets()
     sets.engaged.HighAcc.Impetus = set_combine(sets.engaged.HighAcc, {})
 
     sets.DT = {                     --	PDT		MDT
-        ammo="Staunch Tathlum +1",	--  3		3
-		head="Malignance Chapeau",	--  6	    6
-        body="Malignance Tabard",	--	9	    9
+        head="Ken. Jinpachi +1",
+		body="Malignance Tabard",	--	9	    9
         hands="Malignance Gloves",	--	5	    5
         legs="Malignance Tights",   --  7     	7
-        feet="Malignance Boots",	--  4	    4
-  	}                               -- 31      31
+        feet="Ken. Sune-Ate +1",
+		ring2="Defending Ring",		-- 10	   10
+		-- Belt						--  5		5
+		-- Cape						-- 10
+  	}                               -- 46      36
 
     sets.engaged.DT = set_combine(sets.engaged,sets.DT )
 
-    sets.engaged.DT.Impetus = set_combine(sets.engaged.DT, {body="Bhikku Cyclas +1"})
+    sets.engaged.DT.Impetus = set_combine(sets.engaged.DT, {})--body="Bhikku Cyclas +1"})
 
     sets.engaged.MidAcc.DT = set_combine(sets.engaged.DT, {})
-    sets.engaged.MidAcc.DT.Impetus = set_combine(sets.engaged.DT.MidAcc, {body="Bhikku Cyclas +1"})
+    sets.engaged.MidAcc.DT.Impetus = set_combine(sets.engaged.DT.MidAcc, {})--, {body="Bhikku Cyclas +1"})
 
     sets.engaged.HighAcc.DT = set_combine(sets.engaged.MidAcc.DT, {})
     sets.engaged.HighAcc.DT.Impetus = set_combine(sets.engaged.HighAcc.DT, {})
@@ -126,7 +138,7 @@ function init_gear_sets()
         ear1="Sherida Earring",
         ear2="Moonshade Earring",
         body="Ken. Samue +1",
-        hands=gear.Adhemar_TP_hands,
+        hands="Ryuo Tekko +1",
         ring1="Niqmaddu Ring",
         ring2="Gere Ring",
         back=gear.MNK_WS_Cape,
@@ -158,7 +170,7 @@ end
 
 function job_post_precast(spell, action, spellMap, eventArgs)
   if state.Buff.Impetus and (spell.english == "Ascetic's Fury" or spell.english == "Victory Smite") and info.impetus_hit_count > 8 then
-      equip(sets.impetus_body)
+      equip(sets.buff.Impetus)
   end
 end
 
@@ -180,6 +192,11 @@ end
 
 function job_update(cmdParams, eventArgs)
     update_melee_groups()
+end
+
+function select_default_macro_book()
+    -- Default macro set/book
+    set_macro_page(1, 5)
 end
 
 -- Keep track of the current hit count while Impetus is up.
