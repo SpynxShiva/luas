@@ -23,6 +23,8 @@ function job_setup()
 	-- Whether a warning has been given for low ammo
 	state.warned = M(false)
 
+	elemental_ws = S{'Aeolian Edge', 'Leaden Salute', 'Wildfire'}
+
 	define_roll_values()
 end
 
@@ -32,7 +34,7 @@ end
 
 -- Setup vars that are user-dependent.  Can override this function in a sidecar file.
 function user_setup()
-    state.OffenseMode:options('Normal', 'MidAcc','HighAcc')
+    state.OffenseMode:options('Normal', 'MidAcc','HighAcc','Crit')
     state.RangedMode:options('STP','Normal', 'Acc')
     state.WeaponskillMode:options('Normal', 'Acc')
     state.PhysicalDefenseMode:options('None', 'PDT')
@@ -71,18 +73,19 @@ function user_setup()
 	-- Bullets
 	gear.RAbullet = "Chrono Bullet"
 	gear.WSbullet = "Chrono Bullet"
-	gear.MAbullet = "Orichalc. Bullet"
-	gear.QDbullet = "Animikii Bullet"
+	gear.MAbullet = "Living Bullet"
+	gear.QDbullet = "Living Bullet"
 	options.ammo_warning_limit = 5
 	
 	-- Weapon sets
-	state.WeaponSets = M{['description']='Weapon set', 'Melee', 'RangedMelee', 'RangedOnly', 'LeadenSpeed', 'LeadenPower'}
+	state.WeaponSets = M{['description']='Weapon set', 'Melee', 'RangedMelee', 'RangedOnly', 'LeadenSpeed', 'LeadenPower','LeadenMelee'}
 	WeaponSetsGear = { 
 		["Melee"] = {main="Naegling",sub="Blurred Knife +1",range="Anarchy +2"},
 		["RangedMelee"] = {main="Kustawi +1",sub="Blurred Knife +1", range="Fomalhaut"},
 		["RangedOnly"] = {main="Kustawi +1",sub="Nusku Shield", range="Fomalhaut"},
-		["LeadenSpeed"] = {main="Tauret",sub="Blurred Knife +1",range="Fomalhaut"},
-		["LeadenPower"] = {main="Naegling",sub="Tauret",range="Fomalhaut"},
+		["LeadenSpeed"] = {main="Tauret",sub="Blurred Knife +1",range="Death Penalty"},
+		["LeadenPower"] = {main="Naegling",sub="Tauret",range="Death Penalty"},
+		["LeadenMelee"] = {main="Naegling",sub="Blurred Knife +1",range="Death Penalty"},
 	}	
 	
 	send_command('bind ^. gs c cycleback WeaponSets')
@@ -160,21 +163,48 @@ function job_post_precast(spell, action, spellMap, eventArgs)
 	end
 	
 	-- Equip obi if weather/day matches for WS/Quick Draw.
-    if spell.type == 'WeaponSkill' or spell.type == 'CorsairShot' then
-        if spell.element == world.weather_element or spell.element == world.day_element then
-			if spell.english ~= "Light Shot" and spell.english ~= "Dark Shot" then
-				equip(sets.Obi)
-			end
-		end
-	end
+    if spell.type == 'WeaponSkill' then
+        if elemental_ws:contains(spell.name) then
+            -- Matching double weather (w/o day conflict).
+            if spell.element == world.weather_element and (get_weather_intensity() == 2 and spell.element ~= elements.weak_to[world.day_element]) then
+                equip(sets.Obi)
+            -- Target distance under 1.7 yalms.
+            elseif spell.target.distance < (1.7 + spell.target.model_size) then
+                equip(sets.Orpheus)
+            -- Matching day and weather.
+            elseif spell.element == world.day_element and spell.element == world.weather_element then
+                equip(sets.Obi)
+            -- Target distance under 8 yalms.
+            elseif spell.target.distance < (8 + spell.target.model_size) then
+                equip(sets.Orpheus)
+            -- Match day or weather.
+            elseif spell.element == world.day_element or spell.element == world.weather_element then
+                equip(sets.Obi)
+            end
+        end
+    end
 end
 
 -- Run after the general midcast() set is constructed.
 function job_post_midcast(spell, action, spellMap, eventArgs)
 	if spell.type == 'CorsairShot' then
-		if 	( spell.english ~= "Light Shot" and spell.english ~= "Dark Shot" ) and 
-			(spell.element == world.weather_element or spell.element == world.day_element) then
-			equip(sets.Obi)
+		if 	( spell.english ~= "Light Shot" and spell.english ~= "Dark Shot" ) then
+			-- Matching double weather (w/o day conflict).
+			if spell.element == world.weather_element and (get_weather_intensity() == 2 and spell.element ~= elements.weak_to[world.day_element]) then
+				equip(sets.Obi)
+			-- Target distance under 1.7 yalms.
+			elseif spell.target.distance < (1.7 + spell.target.model_size) then
+				equip(sets.Orpheus)
+			-- Matching day and weather.
+			elseif spell.element == world.day_element and spell.element == world.weather_element then
+				equip(sets.Obi)
+			-- Target distance under 8 yalms.
+			elseif spell.target.distance < (8 + spell.target.model_size) then
+				equip(sets.Orpheus)
+			-- Match day or weather.
+			elseif spell.element == world.day_element or spell.element == world.weather_element then
+				equip(sets.Obi)
+			end
 		end
 		
 		if state.QDMode.value == 'Enhance' then
@@ -186,6 +216,11 @@ function job_post_midcast(spell, action, spellMap, eventArgs)
             equip(sets.midcast.CorsairShot.STP)
 		end
 	end
+	
+	if spell.action_type == 'Ranged Attack' and buffactive['Triple Shot'] then
+		equip(sets.TripleShot)
+	end
+	
 end
 
 -- Set eventArgs.handled to true if we don't want any automatic gear equipping to be done.
