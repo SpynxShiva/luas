@@ -145,7 +145,7 @@ sets.precast.WS["Savage Blade"].Acc = set_combine(sets.precast.WS["Savage Blade"
 
 sets.precast.WS['Requiescat']=sets.precast.WS["Savage Blade"]
 
-sets.precast.JA['Fold'] = {hands="Commodore Gants +2"}
+sets.precast.JA['Fold'] = {hands="Lanun Gants +3"}
 --------------------------------------
 -- Midcast sets
 --------------------------------------
@@ -222,7 +222,8 @@ sets.midcast.RA.STP = set_combine(sets.midcast.RA, {
 })
 
 sets.TripleShot = {
-        body="Oshosi Vest +1",
+        hands="Lanun Gants +3",
+		body="Oshosi Vest +1",
 }
 
 
@@ -231,7 +232,7 @@ sets.TripleShot = {
 --------------------------------------
 -- Idle sets (default idle set not needed since the other three are defined, but leaving for testing purposes)
 sets.idle = {					-- PDT	MDT
-	ammo=gear.RAbullet,
+	ammo=gear.MAbullet,
 	head="Malignance Chapeau", 	-- 6	6
 	neck="Loricate Torque +1",	-- 6	6
     ear1="Odnowa Earring +1",	-- 		2
@@ -286,10 +287,8 @@ sets.engaged.MidAcc = set_combine(sets.engaged.LowAcc, {
 
 sets.engaged.HighAcc = set_combine(sets.engaged.MidAcc, {
 	head="Carmine Mask +1",
-	feet=gear.Herc_Acc_feet,
 	ear2="Mache Earring +1",
-	ring2="Ramuh Ring +1",
-	waist="Olseni Belt",
+	ring2="Ramuh Ring +1"
 })
 
 sets.engaged.STP = set_combine(sets.engaged, {
@@ -333,7 +332,6 @@ sets.engaged.DW.MidAcc = set_combine(sets.engaged.DW.LowAcc, {
 
 sets.engaged.DW.HighAcc = set_combine(sets.engaged.DW.MidAcc, {
 	head="Carmine Mask +1",
-	feet=gear.Herc_Acc_feet,
 	ear2="Mache Earring +1",
 })
 
@@ -373,7 +371,6 @@ sets.engaged.DW.MidAcc.LowHaste = set_combine(sets.engaged.DW.LowAcc.LowHaste, {
 
 sets.engaged.DW.HighAcc.LowHaste = set_combine(sets.engaged.DW.MidAcc.LowHaste, {
 	head="Carmine Mask +1",
-	feet=gear.Herc_Acc_feet,
 	ear1="Cessance Earring",
 	ear2="Mache Earring +1",
 })
@@ -416,7 +413,6 @@ sets.engaged.DW.MidAcc.MidHaste = set_combine(sets.engaged.DW.LowAcc.MidHaste, {
 sets.engaged.DW.HighAcc.MidHaste = set_combine(sets.engaged.DW.MidAcc.MidHaste, {
 	head="Carmine Mask +1",
 	legs="Carmine Cuisses +1",
-	feet=gear.Herc_Acc_feet,
 	ear1="Cessance Earring",
 	ear2="Mache Earring +1",
 })
@@ -459,7 +455,6 @@ sets.engaged.DW.MidAcc.HighHaste = set_combine(sets.engaged.DW.LowAcc.HighHaste,
 sets.engaged.DW.HighAcc.HighHaste = set_combine(sets.engaged.DW.MidAcc.HighHaste, {
 	head="Carmine Mask +1",
 	legs="Carmine Cuisses +1",
-	feet=gear.Herc_Acc_feet,
 	ear1="Cessance Earring",
 	ear2="Mache Earring +1",
 })
@@ -502,7 +497,6 @@ sets.engaged.DW.MidAcc.MaxHaste = set_combine(sets.engaged.DW.LowAcc.MaxHaste, {
 sets.engaged.DW.HighAcc.MaxHaste = set_combine(sets.engaged.DW.MidAcc.MaxHaste, {
 	head="Carmine Mask +1",
 	legs="Carmine Cuisses +1",
-	feet=gear.Herc_Acc_feet,
 	ear2="Mache Earring +1",
 })
 
@@ -572,8 +566,24 @@ sets.engaged.DW.MidAcc.DT.MaxHastePlus = set_combine(sets.engaged.DW.MidAcc.MaxH
 sets.engaged.DW.HighAcc.DT.MaxHastePlus = set_combine(sets.engaged.DW.HighAcc.MaxHastePlus, sets.engaged.Hybrid)
 sets.engaged.DW.STP.DT.MaxHastePlus = set_combine(sets.engaged.DW.STP.MaxHastePlus, sets.engaged.Hybrid)    
 
+-- Crit 
+sets.Crit = {
+	head="Mummu Bonnet +2", 	-- 5
+	body="Mummu Jacket +2", 	-- 9
+	legs="Mummu Kecks +2",  	-- 7
+	hands="Mummu Wrists +2",  	-- 6
+	feet="Mummu Gamash. +2", 	-- 5
+	waist="Kwahu Kachina Belt",	-- 4
+	ring1="Hetairoi Ring",		-- 1
+	ring2="Mummu Ring",			-- 3
+	
+} 								--39
+
+sets.engaged.DW.Crit = set_combine(sets.engaged,sets.Crit)
+
 sets.buff.Doom = {waist="Gishdubar Sash"}
 sets.Obi = {waist="Hachirin-no-Obi"}
+sets.Orpheus = {waist="Orpheus's Sash"}
 sets.MBbonus = {feet="Chasseur's Bottes +1"}
 
 
@@ -593,6 +603,8 @@ organizer_items = {
 	gun1="Fomalhaut",
 	gun2="Compensator",
 	gun3="Anarchy +2",
+	gun4="Death Penalty",
+	pouch1="Living Bullet Pouch",
 	-- Meds
 	echos="Echo Drops",
 	remedy="Remedy",
