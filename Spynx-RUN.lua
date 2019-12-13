@@ -245,6 +245,20 @@ function init_gear_sets()
     sets.midcast.Foil = sets.Enmity
 	sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
 	
+	
+	--[[
+	sets.midcast.Cure = {
+        body="Vrikodara Jupon", -- 13
+        hands="Buremte Gloves", --		13
+        neck="Sacro Gorget", 	-- 10	
+        ear2="Mendi. Earring", 	-- 5
+        ring2="Kunaji Ring",	--		5
+		ring1="Asklepian Ring",	--		3
+        back="Solemnity Cape", 	-- 7
+        waist="Gishdubar Sash", --		10
+	}
+	]]--
+	
 	sets.midcast['Blue Magic'] = {}
     sets.midcast['Blue Magic'].Enmity = sets.Enmity
     sets.midcast['Blue Magic'].Cure = sets.midcast.Cure
@@ -337,6 +351,8 @@ function init_gear_sets()
 	sets.precast.WS['Steel Cyclone'] = sets.precast.WS['Fell Cleave']
 	sets.precast.WS['Upheaval'] = sets.precast.WS['Resolution']
 	
+	sets.precast.WS['Ground Strike'] = sets.engaged.FullAcc
+	
     --------------------------------------
     -- Idle/resting/defense sets
     --------------------------------------
@@ -381,7 +397,7 @@ function init_gear_sets()
     -- Defense sets
     sets.defense.PDT = {
 									--	PDT		MDT		BDT
-		sub="Refined Grip +1", 		--	3		3		3
+		sub="Mensch Strap +1", 		--	5				
 		ammo="Staunch Tathlum +1",	--	3		3		3
 		head="Turms Cap +1",		--	
 		neck="Futhark Torque +1",	--	6		6		6
@@ -392,16 +408,15 @@ function init_gear_sets()
 		ring1="Defending Ring",		--	10		10		10
 		ring2="Moonlight Ring",		--	5		5		5
 		back=gear.RUN_tank_Cape,
-		--back=gear.RUN_FC_Cape,
 		waist="Flume Belt +1",		--	4
 		legs="Erilaz Leg Guards +1",--	7
 		feet="Turms Leggings +1",
 		-- Shell V								24
-	}								--	49		61		36
+	}								--	51		58		33
 	
 	sets.defense.MDT = {
 									--	PDT		MDT		BDT
-		sub="Refined Grip +1", 		--	3		3		3
+		sub="Mensch Strap +1", 		--	5				
 		ammo="Staunch Tathlum +1",	--	3		3		3
 		head="Turms Cap +1",		
 		neck="Warder's Charm +1",	--					
@@ -418,7 +433,7 @@ function init_gear_sets()
 		feet="Erilaz Greaves +1",	--	5	
 		-- Shell V								24
 	
-	}								--	48		60		34
+	}								--	46		57		31
 
 	
 	sets.defense.Parry = {
@@ -519,8 +534,8 @@ function job_precast(spell, action, spellMap, eventArgs)
         eventArgs.handled = true
         if spell.action_type == 'Magic' then
                 equip(sets.precast.FC.HP)
-        elseif spell.action_type == 'Ability' then
-            equip(sets.Enmity.HP)
+        --elseif spell.action_type == 'Ability' then
+            --equip(sets.Enmity.HP)
         end
     end
     if spell.english == 'Lunge' then
@@ -558,7 +573,7 @@ end
 function job_midcast(spell, action, spellMap, eventArgs)
     if state.PhysicalDefenseMode.value == 'HP' and spell.action_type == 'Magic' then
         eventArgs.handled = true
-        equip(sets.Enmity.HP)
+        --equip(sets.Enmity.HP)
     end
 end
 
@@ -829,7 +844,7 @@ end
 function handle_weapon(set)
 	-- Equip current GS/grip
 	if state.DefenseMode.value ~= 'None' then 
-		set  = set_combine(set, {main=state.Greatsword.current,sub="Refined Grip +1"})
+		set  = set_combine(set, {main=state.Greatsword.current,sub="Mensch Strap +1"})
 	else
 		set = set_combine(set, {main=state.Greatsword.current,sub="Utu Grip"})
 	end
