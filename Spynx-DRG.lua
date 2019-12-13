@@ -9,6 +9,7 @@ function get_sets()
     -- Load and initialize the include file.
     include('Mote-Include.lua')
 	include('organizer-lib')
+	include('Mote-TreasureHunter')
 end
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
@@ -37,6 +38,8 @@ function user_setup()
 	send_command('bind ^x input /ja "Soul Jump" <t>')
     
     select_default_macro_book()
+	
+	send_command('bind ^t gs c cycle TreasureMode')
 end
 
 -- Called when this job file is unloaded (eg: job change)
@@ -48,6 +51,12 @@ end
 -- Define sets and vars used by this job file.
 function init_gear_sets()
     
+	 sets.TreasureHunter = {
+        head="Wh. Rarab Cap +1", --1
+		waist="Chaac Belt",		-- 1
+        body="Volte Jupon",		-- 2
+  	}
+	
 	--------------------------------------
     -- Precast sets
     --------------------------------------
@@ -55,6 +64,16 @@ function init_gear_sets()
     -- Precast sets to enhance JAs
     sets.precast.JA.Angon = {ammo="Angon",hands="Pteroslaver finger gauntlets"}
 
+	sets.precast.FC = {
+		ammo="Sapience Orb",		--   2
+		head="Carmine Mask +1", 	--	14
+		neck="Orunmila's Torque",  	--	 5
+		body=gear.Taeon_FC_body,	--	 8
+		hands="Leyline Gloves", 	--	 8
+		ear1="Loquacious Earring", 	--	 2
+		ear2="Etiolation Earring",	-- 	 1
+		feet="Carmine Greaves +1",	--	 8
+	}								--  48
 
     -- Weaponskill sets
 
@@ -62,7 +81,6 @@ function init_gear_sets()
     sets.precast.WS = {
 		ammo="Knobkierrie",
 		head="Flam. Zucchetto +2",
-		--body=gear.Valor_DA_body,
 		body="Dagon breastplate",	
 		hands="Sulev. Gauntlets +2",
 		legs="Sulev. Cuisses +2",
@@ -127,8 +145,8 @@ function init_gear_sets()
 		waist="Flume Belt +1",			--	4
 		ear1="Etiolation Earring",		--			3
 		ear2="Odnowa Earring +1",		--			2
-		ring1="Defending Ring",			--	10		10
-		ring2="Moonlight Ring",			--	5		5
+		ring1="Moonlight Ring",			--	5		5
+		ring2="Defending Ring",			--	10		10
 		back=gear.DRG_TP_Cape
 	}									--	51		50
 	
@@ -169,13 +187,15 @@ function init_gear_sets()
 		ear2="Cessance Earring",
 	})
 	
-	sets.DT = {							--	PDT		MDT
-		ammo="Staunch Tathlum +1",		--	2		2
-		neck="Loricate Torque +1",		--	6		6
-		ring1="Defending Ring",			--	10		10
-		hands="Sulev. Gauntlets +2",	--	5		5
-		legs="Sulev. Cuisses +2",		--	7		7
-	}									-- 	30		30
+	
+	sets.DT = {
+		head="Hjarrandi Helm",
+		ear2="Brutal Earring",
+		body="Hjarrandi Breastplate",
+		ring1="Moonlight Ring",	
+		hands="Sulev. Gauntlets +2",
+		
+	}
 	
 	sets.engaged.DT = set_combine(sets.engaged,sets.DT)
     sets.engaged.Acc.DT = set_combine(sets.engaged.Acc,sets.DT)
