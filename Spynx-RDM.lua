@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------------------------------------------
--- (Original: Motenten / Modified: Arislan / Modified: Spynx )
+-- (Original: Motenten / Modified: Arislan)
 -------------------------------------------------------------------------------------------------------------------
 
 --[[	Custom Features:
@@ -19,6 +19,7 @@ function get_sets()
 	-- Load and initialize the include file.
 	include('Mote-Include.lua')
 	include('organizer-lib')
+	include('Mote-TreasureHunter')
 end
 
 
@@ -58,9 +59,21 @@ function user_setup()
 	send_command('bind ^c gs c toggle CP')
 	send_command('bind ^l gs c toggle WeaponLock')
 	
-	update_offense_mode()	
 	select_default_macro_book()
 	set_lockstyle()
+	
+	-- Make sure gearinfo is loaded to handle haste/DW
+	send_command('lua l gearinfo')
+	
+	send_command('bind ^t gs c cycle TreasureMode')
+	
+	-- Haste auto-detection setup
+	Haste = 0
+    DW_needed = 0
+    DW = false
+    moving = false
+    update_combat_form()
+    determine_haste_group()
 end
 
 -- Called when this job file is unloaded (eg: job change)
@@ -74,6 +87,11 @@ end
 
 -- Define sets and vars used by this job file.
 function init_gear_sets()
+	
+	sets.TreasureHunter = {
+		waist="Chaac Belt",		-- 1
+		body="Volte Jupon",		-- 2
+	}
 	
 	------------------------------------------------------------------------------------------------
 	---------------------------------------- Precast Sets ------------------------------------------
@@ -111,46 +129,29 @@ function init_gear_sets()
 	------------------------------------- Weapon Skill Sets ----------------------------------------
 	------------------------------------------------------------------------------------------------
 	
-	--[[
 	sets.precast.WS = {
-		ammo="Yetshila",
-        head="Jhakri Coronal +1",
-		neck="Fotia Gorget",
-		ear1="Moonshade Earring",
-		ear2="Sherida Earring",
-        body="Ayanmo Corazza +2",
-		hands="Jhakri Cuffs +2",
-		ring1="Begrudging Ring",
-		ring2="Hetairoi Ring", 
-        back="Kayapa Cape",
-		waist="Fotia Belt",
-		legs="Jhakri Slops +2",
-		feet="Thereoid Greaves"
-	}
-	
-	sets.precast.WS['Chant du Cygne'] = set_combine(sets.precast.WS, {})
-	
-	sets.precast.WS['Savage Blade'] = {
 		ammo="Amar Cluster",
-        head="Jhakri Coronal +1",
+		head="Jhakri Coronal +2",
 		neck="Caro Necklace",
-		ear1="Moonshade Earring",
-		ear2="Ishvara Earring",
+        ear1="Moonshade Earring",
+		ear2="Sherida Earring",
         body="Jhakri Robe +2",
 		hands="Jhakri Cuffs +2",
-		ring1="Rufescent Ring",
-		ring2="Ifrit Ring", 
-        back="Buquwik Cape",
+		ring1="Karieyh Ring +1",
+		ring2="Epaminondas's Ring",
+        back=gear.RDM_WSD_Cape,
 		waist="Prosilio Belt +1",
 		legs="Jhakri Slops +2",
 		feet="Jhakri Pigaches +2"
 	}
 	
+	sets.precast.WS['Chant du Cygne'] = set_combine(sets.precast.WS, {})
+	
+	sets.precast.WS['Savage Blade'] = {}
+	
 	sets.precast.WS['Death Blossom'] = 	sets.precast.WS['Savage Blade']
 	sets.precast.WS['Requiescat'] = set_combine(sets.precast.WS, {})
 	sets.precast.WS['Sanguine Blade'] = sets.midcast['Elemental Magic']
-	
-	]]--
 	
 	------------------------------------------------------------------------------------------------
 	---------------------------------------- Midcast Sets ------------------------------------------
@@ -162,16 +163,17 @@ function init_gear_sets()
 
 	sets.midcast.Cure = {
 										-- CP	CPR
-		head="Gendewitha caubeen +1",	-- 10
-		neck="Phalaina Locket",			--	4	  4
-		ear2="Mendi. Earring",			--  5
-        body="Heka's Kalasiris",		-- 15
-		hands="Buremte Gloves",			-- 		 13
-		ring1="Kunaji Ring",			--		  5
-        waist="Gishdubar Sash",			-- 		 10
-		legs="Gyve Trousers",			-- 10
-		feet="Medium's sabots"			--  9
-	}									-- 53	 32
+		head="Gendewitha caubeen +1",	--	10	
+		neck="Phalaina Locket",			--	4		4
+		ear2="Mendi. Earring",			--	5
+		body="Vrikodara Jupon",			--	13
+		hands=gear.Telchine_CPR_hands,	--	10		7
+		ring1="Kunaji Ring",			--			5
+		ring2="Asklepian Ring",			--			3
+		waist="Gishdubar Sash",			--			10
+		legs="Gyve Trousers",			--	10
+		feet="Medium's sabots"			--	9
+	} 									--	61		29
 	
 	sets.midcast.CureWeather = set_combine(sets.midcast.Cure, {waist="Hachirin-no-Obi",})
 
@@ -230,11 +232,13 @@ function init_gear_sets()
 	sets.midcast.Stoneskin = set_combine(sets.midcast['Enhancing Magic'], {neck="Nodens Gorget",waist="Siegel Sash",})
 
 	sets.midcast['Phalanx'] = set_combine(sets.midcast['Enhancing Magic'], {})
+	
 	sets.midcast.Aquaveil = set_combine(sets.midcast['Enhancing Magic'], {
 		main="Vadose Rod",
 		sub="Ammurapi Shield",
 		head="Amalric Coif +1",
-		waist="Emphatikos Rope"
+		waist="Emphatikos Rope",
+		legs="Shedir Seraweels"
 	})
 
 	sets.midcast.Storm = sets.midcast.EnhancingDuration
@@ -270,17 +274,21 @@ function init_gear_sets()
 	
 	sets.midcast.SkillEnfeeblesAcc = set_combine(sets.midcast.SkillEnfeebles,{
 		body="Atrophy Tabard +2",
+		ring1="Stikini Ring +1",
+		ring2="Stikini Ring +1",
 	})
 
-	sets.midcast.EffectEnfeebles = {
+	sets.midcast.EffectEnfeebles = set_combine(sets.midcast.MndEnfeebles,{
 		body="Lethargy Sayon +1",
 		back=gear.RDM_MND_Cape,
-	}
+	})
 	
-	sets.midcast.EffectEnfeeblesAcc = {
+	sets.midcast.EffectEnfeeblesAcc = set_combine(sets.midcast.EffectEnfeebles,{
 		body="Atrophy Tabard +2",
 		back=gear.RDM_MND_Cape,
-	}
+		ring1="Stikini Ring +1",
+		ring2="Stikini Ring +1",
+	})
 	
 	sets.midcast.ElementalEnfeeble = sets.midcast.IntEnfeebles
 
@@ -308,14 +316,14 @@ function init_gear_sets()
 		sub="Enki Strap",
 		ammo="Pemphredo Tathlum",
 		head=gear.Merl_nuke_head,
-		body="Merlinic Jubbah",
-		hands=gear.Chir_nuke_hands,
-		legs=gear.Merl_nuke_legs,
-		feet=gear.Merl_nuke_feet,
+		body="Amalric Doublet +1",
+        hands="Amalric Gages +1",
+        legs="Amalric Slops +1",
+        feet="Amalric Nails +1",
 		neck="Sanctity Necklace",
 		ear1="Friomisi Earring",
 		ear2="Regal Earring",
-		ring1="Shiva Ring +1",
+		ring1="Freke Ring",
 		ring2="Shiva Ring +1",
 		back=gear.RDM_INT_Cape,
 		waist="Refoccilation Stone",
@@ -323,9 +331,7 @@ function init_gear_sets()
 
 	sets.midcast['Elemental Magic'].Seidr = set_combine(sets.midcast['Elemental Magic'], {body="Seidr Cotehardie"})
 
-	sets.midcast['Elemental Magic'].Resistant = set_combine(sets.midcast['Elemental Magic'], {
-		neck="Sanctity Necklace",ear1="Hermetic Earring"
-	})
+	sets.midcast['Elemental Magic'].Resistant = set_combine(sets.midcast['Elemental Magic'], {})
 		
 	sets.midcast.Impact = set_combine(sets.midcast['Elemental Magic'], {
 		head=empty,
@@ -339,7 +345,7 @@ function init_gear_sets()
 		
 	-- Job-specific buff sets
 	sets.buff.ComposureOther = {
-		--head="Leth. Chappel +1",
+		head="Leth. Chappel +1",
 		body="Lethargy Sayon +1",
 		--hands="Leth. Gantherots +1",
 		legs="Leth. Fuseau +1",
@@ -365,8 +371,8 @@ function init_gear_sets()
 		neck="Loricate Torque +1",
 		ear1="Genmei Earring",
 		ear2="Etiolation Earring",
-		ring1="Defending Ring",
-		ring2="Dark Ring",
+		ring1="Stikini Ring +1",
+		ring2="Stikini Ring +1",
 		back="Moonbeam Cape",
 		waist="Flume Belt +1",
 	}
@@ -374,19 +380,15 @@ function init_gear_sets()
 	
 	sets.idle.DT = set_combine(sets.idle,{
 									-- 	PDT	MDT
-		ammo="Staunch Tathlum +1",		--	2	2
-		head="Gende. Caubeen +1",	--	4	4		
+		head="Malignance Chapeau",	--  6	6
+		body="Malignance Tabard",	--	9	9
+		hands="Malignance Gloves",	--	5	5
+		legs="Malignance Tights",	--	7	7
+		feet="Malignance Boots",	--  4	4
+		ring1="Defending Ring", 	-- 10	10
 		neck="Loricate Torque +1",	--	6	6
-		ear1="Etiolation Earring",	--		3
-		ear2="Odnowa Earring +1",	--		2
-		body="Ayanmo Corazza +2",	--	5	5
-		hands="Gende. Gages +1",	--	4	3
-		ring1="Dark Ring",			--	6	4
-		ring2="Defending Ring",		--	10	10
 		back="Moonbeam Cape",		--	5	5
-		legs="Aya. Cosciales +1",	--	4	4
-		feet="Gende. Galosh. +1"	--	4	4
-	})								--	50	52
+	})								--	52	52
 	
 	
 	sets.idle.Town = set_combine(sets.idle, {
@@ -396,11 +398,6 @@ function init_gear_sets()
 	sets.idle.Town.DT = set_combine(sets.idle.Town,sets.idle.DT)
 	
 	sets.idle.Weak = sets.idle.DT
-
-	--[[sets.resting = set_combine(sets.idle, {
-		main="Chatoyant Staff",
-		waist="Shinjutsu-no-Obi +1",
-	})]]--
 	
 	------------------------------------------------------------------------------------------------
 	---------------------------------------- Defense Sets ------------------------------------------
@@ -416,7 +413,7 @@ function init_gear_sets()
 		legs=gear.Merl_MB_legs, 		--	  5
 		feet=gear.Merl_MB_feet, 		--	  8
 		neck="Mizu. Kubikazari", 	--	 10
-		ring1="Mujin Band", 		--			  5
+		ring2="Mujin Band", 		--			  5
 	}								--	 41		 10
 	sets.Kiting = {legs="Carmine Cuisses +1"}
 	sets.latent_refresh = {waist="Fucho-no-obi"}
@@ -427,20 +424,20 @@ function init_gear_sets()
 	------------------------------------------------------------------------------------------------
 	
 	sets.engaged = {
-		main="Almace",
-		sub="Beatific Shield +1",
+		main="Naegling",
+		sub="Thibron",
 		ammo="Ginsen",
-		head="Blistering Sallet +1",
-		body="Ayanmo Corazza +2",
-		hands="Ayanmo Manopolas +1",
-		legs="Carmine Cuisses +1",
-		feet="Carmine Greaves +1",
-		neck="Asperity Necklace",
-		ear1="Brutal Earring",
+		head="Malignance Chapeau",	--  6	6
+		body="Malignance Tabard",	--	9	9
+		hands="Malignance Gloves",	--	5	5
+		legs="Malignance Tights",	--	7	7
+		feet="Malignance Boots",	--  4	4
+		neck="Anu Torque",
+		ear1="Telos Earring",
 		ear2="Sherida Earring",
 		ring1="Petrov Ring",
 		ring2="Hetairoi Ring",
-		back="Bleating Mantle",
+		back=gear.RDM_DW_Cape,
 		waist="Windbuffet Belt +1",
 	}
 
@@ -449,13 +446,16 @@ function init_gear_sets()
 	-- Assuming capped haste, need 21DW to cap /DNC and 11DW to cap /NIN
 	-- Assuming only haste2,  need 41DW to cap /DNC and 31DW to cap /NIN
 	sets.engaged.DW = set_combine(sets.engaged, {
-		sub="Ternion Dagger +1",		
-		legs="Carmine Cuisses +1",	-- 6
-		--waist="Reiki Yotai", 		-- 7
-		ear1="Suppanomimi",			-- 5
-									-- 18
-		
+		back=gear.RDM_DW_Cape,			-- 11
 	})
+	
+	sets.engaged.DW.DW31 = set_combine(sets.engaged, {
+		back=gear.RDM_DW_Cape,			-- 11
+		waist="Reiki Yotai", 			-- 7
+		ear1="Suppanomimi",				-- 5
+		ear2="Eabani Earring",			-- 4
+	}) 									--27
+	
 
 	sets.engaged.DW.Acc = sets.engaged.DW
 	
@@ -467,6 +467,9 @@ function init_gear_sets()
 	-- Organizer set
 	organizer_items = {
 	  -- Weapons
+	  sword1="Naegling",
+	  sword2="Thibron",
+	  sword3="Almace",
 	  --Food
 	  food="Pear Crepe",
 	  -- Meds
@@ -506,9 +509,9 @@ function job_post_midcast(spell, action, spellMap, eventArgs)
 			end
 		elseif enfeebling_magic_effect:contains(spell.english) then
             if state.CastingMode.value == 'Resistant' then
-				equip(sets.midcast.EffectEnfeebles)
-			else
 				equip(sets.midcast.EffectEnfeeblesAcc)
+			else
+				equip(sets.midcast.EffectEnfeebles)
 			end
 			
         end
@@ -599,6 +602,8 @@ end
 
 -- Called for direct player commands.
 function job_self_command(cmdParams, eventArgs)
+	gearinfo(cmdParams, eventArgs)
+	
 	if cmdParams[1]:lower() == 'scholar' then
 		handle_strategems(cmdParams)
 		eventArgs.handled = true
@@ -607,6 +612,38 @@ function job_self_command(cmdParams, eventArgs)
 		eventArgs.handled = true
 	end
 end
+
+function gearinfo(cmdParams, eventArgs)
+    if cmdParams[1] == 'gearinfo' then
+        if type(tonumber(cmdParams[2])) == 'number' then
+            if tonumber(cmdParams[2]) ~= DW_needed then
+            DW_needed = tonumber(cmdParams[2])
+            DW = true
+            end
+        elseif type(cmdParams[2]) == 'string' then
+            if cmdParams[2] == 'false' then
+                DW_needed = 0
+                DW = false
+            end
+        end
+        if type(tonumber(cmdParams[3])) == 'number' then
+            if tonumber(cmdParams[3]) ~= Haste then
+                Haste = tonumber(cmdParams[3])
+            end
+        end
+        if type(cmdParams[4]) == 'string' then
+            if cmdParams[4] == 'true' then
+                moving = true
+            elseif cmdParams[4] == 'false' then
+                moving = false
+            end
+        end
+        if not midaction() then
+            job_update()
+        end
+    end
+end
+
 
 -- Custom spell mapping.
 -- Custom spell mapping.
@@ -648,7 +685,7 @@ end
 -- Called by the 'update' self-command, for common needs.
 -- Set eventArgs.handled to true if we don't want automatic equipping of gear.
 function job_update(cmdParams, eventArgs)
-	update_offense_mode()
+    handle_equipping_gear(player.status)
 end
 
 -- Modify the default idle set after it was constructed.
@@ -732,12 +769,29 @@ function handle_strategems(cmdParams)
 	end
 end
 
-function update_offense_mode()  
-	if player.sub_job == 'NIN' or player.sub_job == 'DNC' then
-		state.CombatForm:set('DW')
-	else
-		state.CombatForm:reset()
-	end
+function job_handle_equipping_gear(playerStatus, eventArgs)
+    update_combat_form()
+    determine_haste_group()
+end
+
+function update_combat_form()  
+	if DW == true then  
+		state.CombatForm:set('DW')  
+	elseif DW == false then  
+		state.CombatForm:reset()  
+	end  
+end
+
+
+function determine_haste_group()
+    classes.CustomMeleeGroups:clear()
+    if DW == true then
+        if DW_needed <= 11 then
+            classes.CustomMeleeGroups:append('')
+        elseif DW_needed > 11 then
+            classes.CustomMeleeGroups:append('DW31')
+        end
+    end
 end
 
 -- Select default macro book on initial load or subjob change.
@@ -749,3 +803,9 @@ end
 function set_lockstyle()
 	--send_command('wait 2; input /lockstyleset 14')
 end
+
+windower.register_event('zone change', 
+    function(zone_id)
+        send_command('gi ugs true')
+    end
+)
