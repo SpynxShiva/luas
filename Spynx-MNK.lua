@@ -8,7 +8,7 @@ function get_sets()
 
     -- Load and initialize the include file.
     include('Mote-Include.lua')
-	include('organizer-lib')
+    include('organizer-lib')
     include('Mote-TreasureHunter')
 end
 
@@ -31,9 +31,9 @@ function user_setup()
     state.OffenseMode:options('Normal','MidAcc','HighAcc')
     state.HybridMode:options('Normal', 'DT')
     state.WeaponskillMode:options('Normal')
-	
+
 	send_command('bind ^t gs c cycle TreasureMode')
-	
+
 	select_default_macro_book()
 end
 
@@ -48,7 +48,7 @@ function init_gear_sets()
         head=gear.Herc_TH_head, -- 2
         body="Volte Jupon",		-- 2
   	}
-	
+
     -- Precast Sets
 	sets.precast.FC = {
 		head=gear.Herc_FC_head,		--  13
@@ -58,29 +58,29 @@ function init_gear_sets()
 		body=gear.Taeon_FC_body,	--	 8
 		hands="Leyline Gloves", 	--	 8
 	}								--	37
-	
+
     -- Idle sets
     sets.idle = {
-		ammo="Staunch Tathlum +1",	--  3		3
-		head="Malignance Chapeau",	--  6	    6
-        neck="Loricate Torque +1",	--	6		6
-		ear1="Sherida Earring",
+        ammo="Staunch Tathlum +1",	--  3	3
+        head="Nyame Helm",			--  7	7
+        neck="Bathy Choker +1",
+        ear1="Infused Earring",
         ear2="Telos Earring",
-		body="Malignance Tabard",	--	9	    9
-        hands="Malignance Gloves",	--	5	    5
+        body="Nyame Mail",          --	9	9
+        hands="Nyame Gauntlets",	--	7	7
         ring1="Shadow Ring",
-		ring2="Defending Ring",     -- 10      10
-		waist="Moonbow Belt",		-- 	5
-		back=gear.MNK_TP_Cape,
-		legs="Malignance Tights",   --  7     	7
-        feet="Malignance Boots",	--  4	    4
-	}								-- 55	   55
+        ring2="Gelatinous Ring +1", --  7	-1
+        waist="Moonbow Belt +1 +1",    -- 	6   6
+        back="Moonlight Cape",      --  6	6
+        legs="Nyame Flanchard",     --  8	8
+        feet="Nyame Sollerets",	    --  7	7
+	}								-- 60   52
 
     -- Engaged sets
     sets.engaged = {
 		ammo="Ginsen",
         head=gear.Adhemar_TP_head,
-        neck="Moonlight Nodowa",
+        neck="Mnk. Nodowa +2",
         ear1="Sherida Earring",
         ear2="Telos Earring",
 		body="Ken. Samue +1",
@@ -88,17 +88,20 @@ function init_gear_sets()
         ring1="Niqmaddu Ring",
         ring2="Gere Ring",
 		back=gear.MNK_TP_Cape,
-        waist="Moonbow Belt",
-        legs="Samnuha Tights",
-        feet=gear.Herc_TP_feet
+        waist="Moonbow Belt +1",
+        legs="Hes. Hose +3",
+        feet="Anch. Gaiters +3"
 	}
 
-    sets.engaged.Impetus = set_combine(sets.engaged, {body="Bhikku Cyclas +1"})
+	sets.buff.Impetus = {body="Bhikku Cyclas +1"}
+    sets.buff.ImpetusWS = {body="Bhikku Cyclas +1", ear2="Schere Earring"}
+
+    sets.engaged.Impetus = set_combine(sets.engaged,sets.buff.Impetus )
 
     sets.engaged.MidAcc = set_combine(sets.engaged, {
         legs="Ken. Hakama +1",
     })
-    sets.engaged.MidAcc.Impetus = set_combine(sets.engaged.MidAcc, {body="Bhikku Cyclas +1"})
+    sets.engaged.MidAcc.Impetus = set_combine(sets.engaged.MidAcc, sets.buff.Impetus)
 
     sets.engaged.HighAcc = set_combine(sets.engaged.MidAcc, {
         head="Ken. Jinpachi +1",
@@ -111,57 +114,59 @@ function init_gear_sets()
         head="Ken. Jinpachi +1",
 		body="Malignance Tabard",	--	9	    9
         hands="Malignance Gloves",	--	5	    5
-        legs="Malignance Tights",   --  7     	7
+        legs="Mpaca's Hose",        --  9    	9
         feet="Ken. Sune-Ate +1",
-		ring2="Defending Ring",		-- 10	   10
-		-- Belt						--  5		5
+		-- Belt						--  6		6
 		-- Cape						-- 10
-  	}                               -- 46      36
+  	}                               -- 39      29
 
     sets.engaged.DT = set_combine(sets.engaged,sets.DT )
 
-    sets.engaged.DT.Impetus = set_combine(sets.engaged.DT, {})--body="Bhikku Cyclas +1"})
+    sets.engaged.DT.Impetus = set_combine(sets.engaged.DT, sets.buff.Impetus)
 
     sets.engaged.MidAcc.DT = set_combine(sets.engaged.DT, {})
-    sets.engaged.MidAcc.DT.Impetus = set_combine(sets.engaged.DT.MidAcc, {})--, {body="Bhikku Cyclas +1"})
+    sets.engaged.MidAcc.DT.Impetus = set_combine(sets.engaged.DT.MidAcc, sets.buff.Impetus)
 
     sets.engaged.HighAcc.DT = set_combine(sets.engaged.MidAcc.DT, {})
-    sets.engaged.HighAcc.DT.Impetus = set_combine(sets.engaged.HighAcc.DT, {})
+    sets.engaged.HighAcc.DT.Impetus = set_combine(sets.engaged.HighAcc.DT, sets.buff.Impetus)
 
-	sets.buff.Impetus = {body="Bhikku Cyclas +1"}
-	
     -- WS Sets
     sets.precast.WS = {
         ammo="Knobkierrie",
         head=gear.Adhemar_TP_head,
         neck="Fotia Gorget",
         ear1="Sherida Earring",
-        ear2="Moonshade Earring",
+        ear2="Odr Earring",
         body="Ken. Samue +1",
         hands="Ryuo Tekko +1",
         ring1="Niqmaddu Ring",
         ring2="Gere Ring",
         back=gear.MNK_WS_Cape,
-        waist="Moonbow Belt",
-        legs="Ken. Hakama +1",
+        waist="Moonbow Belt +1",
+        legs="Mpaca's Hose",
         feet=gear.Herc_critDmg_feet
     }
-	
+
+    sets.precast.WS['Victory Smite'] = sets.precast.WS
+
 	sets.precast.WS['Raging Fists'] = set_combine(sets.precast.WS,{
+        head="Ken. Jinpachi +1",
         body=gear.Adhemar_TP_body,
+        hands=gear.Adhemar_TP_hands,
         feet="Ken. Sune-Ate +1"
     })
-	
+
 	sets.precast.WS['Shijin Spiral'] = set_combine(sets.precast.WS,{
 		head="Ken. Jinpachi +1",
 		body=gear.Adhemar_TP_body,
 		legs="Jokushu Haidate",
         feet="Ken. Sune-Ate +1",
 	})
-	
+
 	-- Organizer set
   	organizer_items = {
-        weapon1="Karambit",
+        weapon1="Verethragna",
+        weapon2="Godhands",
         sushi="Sublime Sushi",
         atkfood="Red Curry Bun",
   	}
@@ -170,7 +175,7 @@ end
 
 function job_post_precast(spell, action, spellMap, eventArgs)
   if state.Buff.Impetus and (spell.english == "Ascetic's Fury" or spell.english == "Victory Smite") and info.impetus_hit_count > 8 then
-      equip(sets.buff.Impetus)
+      equip(sets.buff.ImpetusWS)
   end
 end
 
@@ -202,9 +207,9 @@ end
 -- Keep track of the current hit count while Impetus is up.
 function on_action_for_impetus(action)
     if state.Buff['Impetus'] then
-	
+
 		previous_count = info.impetus_hit_count
-		
+
         -- count melee hits by player
         if action.actor_id == player.id then
             if action.category == 1 then
